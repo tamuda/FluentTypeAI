@@ -15,9 +15,9 @@
 
 A simple touch-typing practice tool that uses AI to predict your next typing mistake **_before you even make it_.**
 
-*\>>> Minimalist.
-\>>> Distraction-free.
-\>>> No ads, no tracking, no BS.*
+*>>> Minimalist.*  
+*>>> Distraction-free.*  
+*>>> No ads, no tracking, no BS.*
 
 Just you and your keyboard, and some willpower to get better at typing.
 
