@@ -1,0 +1,103 @@
+{
+  "name": "fluenttypeai",
+  "version": "3.10.0",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "build-stats": "cross-env ANALYZE=true npm run build",
+    "clean": "rimraf .next .swc out coverage",
+    "lint": "next lint",
+    "format": "next lint --fix && prettier '**/*.{json,yaml}' --write --ignore-path .gitignore",
+    "check-types": "tsc --noEmit --pretty",
+    "postbuild": "next-sitemap"
+  },
+  "dependencies": {
+    "@next/bundle-analyzer": "^14.1.0",
+    "@types/typed.js": "^2.0.9",
+    "chart": "^0.1.2",
+    "chart.js": "^4.4.1",
+    "mongodb": "^6.3.0",
+    "mongoose": "^8.1.1",
+    "next": "^13.4.1",
+    "next-auth": "^4.22.1",
+    "next-seo": "^6.0.0",
+    "next-sitemap": "^4.0.9",
+    "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
+    "react-dom": "^18.2.0",
+    "react-responsive-carousel": "^3.2.23",
+    "typed.js": "^2.0.16"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.6.3",
+    "@commitlint/config-conventional": "^17.6.3",
+    "@commitlint/cz-commitlint": "^17.5.0",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.2.5",
+    "@typescript-eslint/eslint-plugin": "^5.59.2",
+    "@typescript-eslint/parser": "^5.59.2",
+    "autoprefixer": "^10.4.14",
+    "commitizen": "^4.3.0",
+    "cross-env": "^7.0.3",
+    "cssnano": "^6.0.1",
+    "cypress": "^12.11.0",
+    "depcheck": "^1.4.7",
+    "eslint": "^8.39.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-config-next": "^13.4.1",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-cypress": "^2.13.3",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jest": "^27.2.1",
+    "eslint-plugin-jest-dom": "^4.0.3",
+    "eslint-plugin-jest-formatting": "^3.1.0",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-simple-import-sort": "^10.0.0",
+    "eslint-plugin-storybook": "^0.6.12",
+    "eslint-plugin-tailwindcss": "^3.11.0",
+    "eslint-plugin-testing-library": "^5.10.3",
+    "eslint-plugin-unused-imports": "^2.0.0",
+    "http-server": "^14.1.1",
+    "jest-environment-jsdom": "^29.5.0",
+    "lint-staged": "^13.2.2",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.4.23",
+    "prettier": "^2.8.8",
+    "rimraf": "^5.0.0",
+    "semantic-release": "^19.0.5",
+    "start-server-and-test": "^2.0.0",
+    "tailwindcss": "^3.3.2",
+    "typescript": "^4.9.5"
+  },
+  "config": {
+    "commitizen": {
+      "path": "@commitlint/cz-commitlint"
+    }
+  },
+  "release": {
+    "branches": [
+      "main"
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      [
+        "@semantic-release/npm",
+        {
+          "npmPublish": false
+        }
+      ],
+      "@semantic-release/git",
+      "@semantic-release/github"
+    ]
+  },
+  "author": "Aleksa Gavric (https://github.com/AleksaGavric)"
+}
