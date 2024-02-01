@@ -21,12 +21,19 @@ const Practice = () => {
   const reloadData = () => {
     setStatsHistoryKey((prevKey) => prevKey + 1);
     setLeaderboardKey((prevKey) => prevKey + 1);
+    console.log(`Reloading data on slide ${currentSlide}`);
   };
 
   const handleRightArrowAction = () => {
     setCurrentSlide((prev) => (prev < 2 ? prev + 1 : prev));
-    reloadData();
   };
+
+  useEffect(() => {
+    if (currentSlide === 0 || currentSlide === 2) {
+      console.log(`Reloading data on slide ${currentSlide}`);
+      reloadData();
+    }
+  }, [currentSlide]);
 
   const handleKeyDown = (e: { key: string }) => {
     if (e.key === 'ArrowRight') {
@@ -38,7 +45,6 @@ const Practice = () => {
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
-    console.log(currentSlide);
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };

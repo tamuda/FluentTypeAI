@@ -11,6 +11,7 @@
 public/robots.txt
 public/sitemap.xml
 public/sitemap-*.xml
+public/devnotes.md
 
 # cache
 .swc/
