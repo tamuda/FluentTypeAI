@@ -8,6 +8,7 @@ import {
   Title,
   Tooltip,
 } from 'chart.js';
+import chartTrendline from 'chartjs-plugin-trendline';
 import { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 
@@ -18,7 +19,8 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  chartTrendline
 );
 
 interface TypingHistory {
@@ -89,11 +91,29 @@ const StatsHistory = ({ user }: { user: any }) => {
               labels: history.map((_, index) => `${index + 1}`),
               datasets: [
                 {
-                  label: 'WPM Over Time',
+                  label: 'WPM',
                   data: history.map((item) => item.wpm),
                   fill: false,
                   borderColor: 'rgb(75, 192, 192)',
                   tension: 0.1,
+                  trendlineLinear: {
+                    borderColor: 'red',
+                    colorMin: 'red',
+                    colorMax: 'red',
+                    lineStyle: 'dotted',
+                    width: 2,
+                  },
+                } as any,
+                {
+                  label: 'Trendline',
+                  data: [],
+                  fill: true,
+                  borderColor: 'red',
+                  borderWidth: 2,
+                  borderDash: [5, 5],
+                  pointRadius: 0,
+                  pointHitRadius: 0,
+                  pointHoverRadius: 0,
                 },
               ],
             }}
@@ -105,7 +125,8 @@ const StatsHistory = ({ user }: { user: any }) => {
               },
               plugins: {
                 legend: {
-                  display: false,
+                  display: true,
+                  onClick: () => {},
                 },
               },
             }}
