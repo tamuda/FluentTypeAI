@@ -8,7 +8,7 @@ import { Carousel } from 'react-responsive-carousel';
 import Footer from '../components/FooterDashboard';
 import Header from '../components/HeaderDashboard';
 import Interface from '../components/Interface';
-import TopTypersLeaderboard from '../components/Leaderboard';
+import Leaderboard from '../components/Leaderboard';
 import StatsHistory from '../components/StatsHistory';
 
 const Practice = () => {
@@ -16,17 +16,16 @@ const Practice = () => {
   const isLoading = status === 'loading';
   const [currentSlide, setCurrentSlide] = useState(1);
   const [statsHistoryKey, setStatsHistoryKey] = useState(0);
+  const [leaderboardKey, setLeaderboardKey] = useState(0);
 
-  const reloadStatsHistory = () => {
+  const reloadData = () => {
     setStatsHistoryKey((prevKey) => prevKey + 1);
+    setLeaderboardKey((prevKey) => prevKey + 1);
   };
 
   const handleRightArrowAction = () => {
     setCurrentSlide((prev) => (prev < 2 ? prev + 1 : prev));
-    if (currentSlide === 1) {
-      // Only reload stats history when on the StatsHistory slide
-      reloadStatsHistory();
-    }
+    reloadData();
   };
 
   const handleKeyDown = (e: { key: string }) => {
@@ -39,6 +38,7 @@ const Practice = () => {
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
+    console.log(currentSlide);
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
@@ -121,7 +121,7 @@ const Practice = () => {
             LeftArrow(clickHandler, hasPrev)
           }
         >
-          <TopTypersLeaderboard />
+          <Leaderboard key={leaderboardKey} />
           <Interface user={session} />
           <StatsHistory key={statsHistoryKey} user={session} />
         </Carousel>
