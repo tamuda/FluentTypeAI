@@ -3,35 +3,37 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
-import React from 'react';
 import { Carousel } from 'react-responsive-carousel';
 
 import Footer from '../components/FooterDashboard';
 import Header from '../components/HeaderDashboard';
 import Interface from '../components/Interface';
+import TopTypersLeaderboard from '../components/Leaderboard';
 import StatsHistory from '../components/StatsHistory';
 
 const Practice = () => {
   const { data: session, status } = useSession();
   const isLoading = status === 'loading';
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(1);
   const [statsHistoryKey, setStatsHistoryKey] = useState(0);
 
   const reloadStatsHistory = () => {
-    setStatsHistoryKey((prevKey) => prevKey + 1); // Update key to remount StatsHistory
+    setStatsHistoryKey((prevKey) => prevKey + 1);
   };
 
   const handleRightArrowAction = () => {
-    setCurrentSlide((prev) => prev + 1);
-    reloadStatsHistory();
+    setCurrentSlide((prev) => (prev < 2 ? prev + 1 : prev));
+    if (currentSlide === 1) {
+      // Only reload stats history when on the StatsHistory slide
+      reloadStatsHistory();
+    }
   };
 
   const handleKeyDown = (e: { key: string }) => {
     if (e.key === 'ArrowRight') {
-      setCurrentSlide((prev) => prev + 1);
       handleRightArrowAction();
     } else if (e.key === 'ArrowLeft') {
-      setCurrentSlide((prev) => prev - 1);
+      setCurrentSlide((prev) => (prev > 0 ? prev - 1 : prev));
     }
   };
 
@@ -40,7 +42,7 @@ const Practice = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [currentSlide]);
 
   if (isLoading) {
     return <div role="status"></div>;
@@ -119,6 +121,7 @@ const Practice = () => {
             LeftArrow(clickHandler, hasPrev)
           }
         >
+          <TopTypersLeaderboard />
           <Interface user={session} />
           <StatsHistory key={statsHistoryKey} user={session} />
         </Carousel>
