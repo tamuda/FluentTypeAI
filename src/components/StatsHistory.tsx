@@ -93,7 +93,6 @@ const StatsHistory = ({ user }: { user: any }) => {
                 {
                   label: 'WPM',
                   data: history.map((item) => item.wpm),
-                  fill: false,
                   borderColor: 'rgb(75, 192, 192)',
                   tension: 0.1,
                   trendlineLinear: {
@@ -107,7 +106,6 @@ const StatsHistory = ({ user }: { user: any }) => {
                 {
                   label: 'Trendline',
                   data: [],
-                  fill: true,
                   borderColor: 'red',
                   borderWidth: 2,
                   borderDash: [5, 5],
