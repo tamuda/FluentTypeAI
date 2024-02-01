@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import data from '../../public/text.json';
 
-const wordCount = 10;
+const wordCount = 35;
 
 function getRandomText() {
   const wordList: (string | undefined)[] = [];

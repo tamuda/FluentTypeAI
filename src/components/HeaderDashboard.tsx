@@ -22,7 +22,7 @@ export default function HeaderDashboard({ user }: InterfaceProps) {
         aria-label="Practice"
       >
         <div className="flex items-center">
-          <Link href="/">
+          <Link href="/?from=practice">
             <Image src="/assets/logo.png" alt="logo" height={29} width={146} />
           </Link>
         </div>

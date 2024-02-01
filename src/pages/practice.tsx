@@ -12,9 +12,10 @@ import Interface from '../components/Interface';
 import StatsHistory from '../components/StatsHistory';
 
 const Practice = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+  const isLoading = status === 'loading';
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [statsHistoryKey, setStatsHistoryKey] = useState(0); // Key for StatsHistory component
+  const [statsHistoryKey, setStatsHistoryKey] = useState(0);
 
   const reloadStatsHistory = () => {
     setStatsHistoryKey((prevKey) => prevKey + 1); // Update key to remount StatsHistory
@@ -40,6 +41,10 @@ const Practice = () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
+
+  if (isLoading) {
+    return <div role="status"></div>;
+  }
 
   const LeftArrow = (
     clickHandler: React.MouseEventHandler<HTMLButtonElement> | undefined,
@@ -93,6 +98,7 @@ const Practice = () => {
         </svg>
       </button>
     );
+
   if (session && session.user) {
     return (
       <div className="flex h-screen flex-col overflow-hidden">
