@@ -124,7 +124,7 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
   };
 
   const updateTypingHistory = async () => {
-    if (!isFinished || !wpm || !email) return;
+    if (!isFinished || !wpm || !email || wpm > 250) return;
 
     try {
       await fetch('/api/update_history', {
