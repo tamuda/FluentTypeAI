@@ -35,8 +35,8 @@ const TopTypersLeaderboard = () => {
   }, []);
 
   return (
-    <div className="flex h-screen flex-col items-center justify-center p-6 pb-40 md:flex-row">
-      <div className="m-4 flex flex-1 flex-col justify-center bg-white bg-gradient-to-r from-blue-100 to-teal-50 p-4 text-center shadow-xl md:max-h-[50vh]">
+    <div className="flex flex-col items-center h-screen justify-center p-6 pb-40 md:flex-row">
+      <div className="m-4 flex min-h-[33vh] min-w-[66vw] flex-col justify-center bg-white bg-gradient-to-r from-blue-100 to-teal-50 p-4 text-center shadow-xl">
         <h1 className="mb-4 text-xl font-bold">Weekly Leaderboard (top 10)</h1>
         <div className="overflow-auto">
           <table className="w-full bg-white">

@@ -58,15 +58,15 @@ const StatsHistory = ({ user }: { user: any }) => {
 
   return (
     <div className="flex h-screen flex-col items-center justify-center p-6 pb-40 md:flex-row">
-      <div className="m-4 flex flex-1 flex-col justify-center bg-white bg-gradient-to-r from-blue-100 to-teal-50 p-4 text-center shadow-xl md:max-h-[50vh]">
+      <div className="m-4 flex flex-1 flex-col justify-center bg-white bg-gradient-to-r from-blue-100 to-teal-50 p-4 text-center shadow-xl md:max-h-[45vh] md:max-w-[45vw]">
         <h1 className="mb-4 text-xl font-bold">Typing History</h1>
         <div className="overflow-auto max-h-[40vh]">
-          <table className="w-full bg-white justify-center text-center">
+          <table className="w-full bg-white">
             <thead>
               <tr className="bg-blue-200">
-                <th className="text-center justify-center">Session</th>
-                <th className="text-center justify-center">WPM</th>
-                <th className="text-center justify-center">Time</th>
+                <th>Session</th>
+                <th>WPM</th>
+                <th>Time</th>
               </tr>
             </thead>
             <tbody>
@@ -83,7 +83,7 @@ const StatsHistory = ({ user }: { user: any }) => {
           </table>
         </div>
       </div>
-      <div className="m-4 flex flex-1 flex-col justify-center rounded bg-white bg-gradient-to-r from-teal-50 to-blue-100 p-4 shadow-lg md:max-h-[50vh]">
+      <div className="m-4 flex flex-1 flex-col justify-center bg-white bg-gradient-to-r from-teal-50 to-blue-100 p-4 text-center shadow-lg md:max-h-[50vh] md:max-w-[45vw]">
         <h2 className="mb-4 text-xl font-bold">Progression</h2>
         {history ? (
           <Line
