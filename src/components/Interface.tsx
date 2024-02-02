@@ -181,10 +181,10 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
   return (
     <div className="flex h-screen items-center justify-center">
       <div className="flex w-full flex-col items-center justify-center p-4 pb-32">
-        <div className="max-width-2-3 flex items-center justify-center rounded bg-white p-2 shadow-2xl">
+        <div className="max-width-2-3 flex items-center justify-center rounded bg-white shadow-2xl">
           <div
             id="typingtext"
-            className="relative flex items-center justify-center rounded-lg bg-gradient-to-r from-blue-100 to-teal-100 p-2 text-xl"
+            className="relative flex items-center justify-center rounded-lg bg-teal-100 p-2 text-xl"
           >
             <div className={`roboto grow ${isFinished ? 'blur' : ''}`}>
               {typingText.map((word, index) => (
