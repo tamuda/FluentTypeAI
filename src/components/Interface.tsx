@@ -74,23 +74,33 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
       }
     }
 
-    // Check if the current word matches and it's the last word
+    // When the user types, check against the current word plus space for a match.
+    const currentWordWithSpace = typingText[wordIndex] + ' ';
+    const isCorrectUpToSpace = currentInput === currentWordWithSpace;
+
+    if (isCorrectUpToSpace) {
+      // If the input exactly matches the current word plus the space, move to the next word
+      setWordIndex((prevIndex) => prevIndex + 1);
+      setInputValue(''); // Reset input for the next word
+    } else if (currentInput.endsWith(' ') && !isCorrectUpToSpace) {
+      // If the user types a space but the word is incorrect, do not reset input
+      // Show the space as an incorrect character by not clearing the input
+      // Prevent moving to the next word automatically
+    }
+
+    // Check if the typing text is finished
+    const trimmedInput = currentInput.trim();
     if (
-      currentInput.trim() === typingText[wordIndex] &&
-      wordIndex === wordCount - 1
+      trimmedInput === typingText[wordIndex] &&
+      wordIndex === typingText.length - 1
     ) {
-      // Calculate WPM here before setting isFinished to true
+      // If the last word is correctly typed, finish typing
       if (startTime) {
         const durationInMinutes = (Date.now() - startTime) / 60000;
         const calculatedWPM = Math.floor((wordIndex + 1) / durationInMinutes);
         setWpm(calculatedWPM);
       }
       setIsFinished(true);
-      setInputValue('');
-    } else if (currentInput.endsWith(' ') || currentInput.endsWith('\n')) {
-      if (currentInput.trim() === typingText[wordIndex]) {
-        setWordIndex((prevIndex) => prevIndex + 1);
-      }
       setInputValue('');
     }
   };
