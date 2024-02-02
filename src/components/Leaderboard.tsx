@@ -8,12 +8,12 @@ interface TopTyper {
 
 const TopTypersLeaderboard = () => {
   const [topTypers, setTopTypers] = useState<TopTyper[] | undefined>(undefined);
-  const [isLoading, setIsLoading] = useState(true); // State to track loading status
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchTopTypers = async () => {
       try {
-        setIsLoading(true); // Begin loading
+        setIsLoading(true);
         const response = await fetch('/api/get_leaderboard', {
           method: 'GET',
           headers: {

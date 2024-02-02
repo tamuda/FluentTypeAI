@@ -158,20 +158,20 @@ const Interface = ({ user }: { user: any }) => {
             {isFinished && (
               <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
                 <p className="text-4xl font-bold">{`${wpm} WPM`}</p>
-                <div className="flex items-center justify-center space-x-4 text-sm">
+                {/* <div className="flex items-center justify-center space-x-4 text-sm">
                   <div className="inline-flex items-center">
-                    <span className="inline-flex items-center justify-center rounded border border-gray-400 p-1 shadow-sm">
+                    <span className="inline-flex items-center justify-center rounded border border-black p-1 shadow-sm">
                       &#x2190;
                     </span>
                     <span className="ml-2">Leaderboard</span>
                   </div>
                   <div className="inline-flex items-center">
                     <span className="mr-2">Stats & History</span>
-                    <span className="inline-flex items-center justify-center rounded border border-gray-400 p-1 shadow-sm">
+                    <span className="inline-flex items-center justify-center rounded border border-black p-1 shadow-sm">
                       &#x2192;
                     </span>
                   </div>
-                </div>
+                </div> */}
               </div>
             )}
           </div>

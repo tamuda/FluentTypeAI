@@ -21,7 +21,6 @@ const Practice = () => {
   const reloadData = () => {
     setStatsHistoryKey((prevKey) => prevKey + 1);
     setLeaderboardKey((prevKey) => prevKey + 1);
-    console.log(`Reloading data on slide ${currentSlide}`);
   };
 
   const handleRightArrowAction = () => {
@@ -59,25 +58,29 @@ const Practice = () => {
     hasPrev: boolean
   ) =>
     hasPrev && (
-      <button
-        onClick={clickHandler}
-        className="absolute left-0 top-1/2 z-10 -translate-y-1/2 pb-36"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth="1.5"
-          stroke="currentColor"
-          className="size-10"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="m18.75 4.5-7.5 7.5 7.5 7.5m-6-15L5.25 12l7.5 7.5"
-          />
-        </svg>
-      </button>
+      <div className="absolute left-0 top-1/2 z-10 flex -translate-y-1/2 flex-row pb-36">
+        <button onClick={clickHandler}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+            className="size-10"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="m18.75 4.5-7.5 7.5 7.5 7.5m-6-15L5.25 12l7.5 7.5"
+            />
+          </svg>
+        </button>
+        {currentSlide === 1 && (
+          <button onClick={clickHandler} className="text-sm">
+            Leaderboard
+          </button>
+        )}
+      </div>
     );
 
   const RightArrow = (
@@ -85,26 +88,29 @@ const Practice = () => {
     hasNext: boolean
   ) =>
     hasNext && (
-      <button
-        onClick={clickHandler}
-        className="absolute right-0 top-1/2 z-10 -translate-y-1/2 pb-36"
-        aria-label="Next Slide"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth="1.5"
-          stroke="currentColor"
-          className="size-10"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5"
-          />
-        </svg>
-      </button>
+      <div className="absolute right-0 top-1/2 z-10 flex -translate-y-1/2 flex-row pb-36">
+        {currentSlide === 1 && (
+          <button onClick={clickHandler} className="text-sm">
+            Dashboard
+          </button>
+        )}
+        <button onClick={clickHandler} aria-label="Next Slide">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+            className="size-10"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5"
+            />
+          </svg>
+        </button>
+      </div>
     );
 
   if (session && session.user) {
