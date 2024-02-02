@@ -33,9 +33,24 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
   const [typingText, setTypingText] = useState(getRandomText());
   const [wpm, setWpm] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
+  const [hasStartedTyping, setHasStartedTyping] = useState(false);
   const firstName = user.user?.name?.split(' ')[0];
   const email = user.user?.email;
   const inputRef = useRef<HTMLInputElement>(null);
+
+  function getPlaceholderMessage(wpm: number) {
+    if (wpm === 0) {
+      return `Welcome to the practice grounds, ${firstName}!`;
+    } else if (wpm < 20) {
+      return `That's a good start ${firstName}, try to pick up the pace!`;
+    } else if (wpm < 40) {
+      return `You're doing great ${firstName}, keep pushing!`;
+    } else if (wpm < 60) {
+      return `Impressive speed ${firstName}, but can you go faster?`;
+    } else {
+      return `You're a typing master ${firstName}, incredible speed!`;
+    }
+  }
 
   useEffect(() => {
     if (isFinished) {
@@ -50,6 +65,10 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
   const handleChange = (e: { target: { value: string } }) => {
     const currentInput = e.target.value;
     setInputValue(currentInput);
+
+    if (currentInput.length > 0 && !hasStartedTyping) {
+      setHasStartedTyping(true);
+    }
 
     if (!startTime) {
       setStartTime(Date.now());
@@ -144,6 +163,7 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
   useEffect(() => {
     if (isFinished) {
       updateTypingHistory();
+      setHasStartedTyping(false);
     }
   }, [isFinished, wpm]);
 
@@ -193,7 +213,11 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
             autoCorrect="off"
             autoCapitalize="off"
             className="w-full rounded-lg p-2 outline-none"
-            placeholder={`Welcome to the practice grounds, ${firstName}!`}
+            placeholder={
+              !hasStartedTyping
+                ? getPlaceholderMessage(isFinished ? wpm : 0)
+                : ''
+            }
             value={inputValue}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
