@@ -17,6 +17,11 @@ const Practice = () => {
   const [currentSlide, setCurrentSlide] = useState(1);
   const [statsHistoryKey, setStatsHistoryKey] = useState(0);
   const [leaderboardKey, setLeaderboardKey] = useState(0);
+  const [isFinished, setIsFinished] = useState(false);
+
+  const handleTypingState = (isFinished: boolean) => {
+    setIsFinished(isFinished);
+  };
 
   const reloadData = () => {
     setStatsHistoryKey((prevKey) => prevKey + 1);
@@ -75,7 +80,7 @@ const Practice = () => {
             />
           </svg>
         </button>
-        {currentSlide === 1 && (
+        {currentSlide === 1 && isFinished && (
           <button onClick={clickHandler} className="text-sm">
             Leaderboard
           </button>
@@ -89,7 +94,7 @@ const Practice = () => {
   ) =>
     hasNext && (
       <div className="absolute right-0 top-1/2 z-10 flex -translate-y-1/2 flex-row pb-36">
-        {currentSlide === 1 && (
+        {currentSlide === 1 && isFinished && (
           <button onClick={clickHandler} className="text-sm">
             Dashboard
           </button>
@@ -134,7 +139,7 @@ const Practice = () => {
           }
         >
           <Leaderboard key={leaderboardKey} />
-          <Interface user={session} />
+          <Interface user={session} typingState={handleTypingState} />
           <StatsHistory key={statsHistoryKey} user={session} />
         </Carousel>
 

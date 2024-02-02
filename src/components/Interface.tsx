@@ -1,3 +1,4 @@
+import type { Session } from 'next-auth/core/types';
 import { useEffect, useRef, useState } from 'react';
 
 import data from '../../public/text.json';
@@ -20,7 +21,13 @@ function getRandomText() {
   return wordList.length > 0 ? wordList : ['Error: No text found. Try again!'];
 }
 
-const Interface = ({ user }: { user: any }) => {
+// Extending the props definition to include the typingState prop
+interface InterfaceProps {
+  user: Session;
+  typingState: (isFinished: boolean) => void;
+}
+
+const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
   const [inputValue, setInputValue] = useState('');
   const [startTime, setStartTime] = useState<number | null>(null);
   const [wordIndex, setWordIndex] = useState(0);
@@ -37,8 +44,9 @@ const Interface = ({ user }: { user: any }) => {
         ? (Date.now() - startTime) / 60000
         : 0;
       setWpm(Math.floor(Number((wordIndex / durationInMinutes).toFixed(2))));
+      typingState(true);
     }
-  }, [isFinished, wordIndex, typingText, startTime]);
+  }, [isFinished, wordIndex, typingText, startTime, typingState]);
 
   const handleChange = (e: { target: { value: string } }) => {
     const currentInput = e.target.value;
@@ -67,6 +75,7 @@ const Interface = ({ user }: { user: any }) => {
     setTypingText(getRandomText());
     setIsFinished(false);
     inputRef.current?.focus();
+    typingState(false);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
