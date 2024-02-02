@@ -29,13 +29,12 @@ interface TypingHistory {
 }
 
 const StatsHistory = ({ user }: { user: any }) => {
-  const email = user.user?.email;
   const [history, setHistory] = useState<TypingHistory[]>([]);
 
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const response = await fetch(`/api/get_history?email=${email}`, {
+        const response = await fetch(`/api/get_history`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -53,14 +52,16 @@ const StatsHistory = ({ user }: { user: any }) => {
       }
     };
 
-    fetchHistory();
-  }, [email]);
+    if (user) {
+      fetchHistory();
+    }
+  }, [user]);
 
   return (
     <div className="flex h-screen flex-col items-center justify-center p-6 pb-40 md:flex-row">
       <div className="m-4 flex flex-1 flex-col justify-center bg-white bg-gradient-to-r from-blue-100 to-teal-50 p-4 text-center shadow-xl md:max-h-[45vh] md:max-w-[45vw]">
         <h1 className="mb-4 text-xl font-bold">Typing History</h1>
-        <div className="overflow-auto max-h-[40vh]">
+        <div className="max-h-[40vh] overflow-auto">
           <table className="w-full bg-white">
             <thead>
               <tr className="bg-blue-200">

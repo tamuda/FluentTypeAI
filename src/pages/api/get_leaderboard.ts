@@ -1,19 +1,24 @@
-import type { Document } from 'mongodb';
+import type { IncomingMessage, ServerResponse } from 'http';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { getServerSession } from 'next-auth/next';
 
 import clientPromise from '../../../lib/mongodb';
+import authOptions from './auth/[...nextauth]';
 
-export default async function handler(
-  req: { method: string },
-  res: {
-    status: (arg0: number) => {
-      (): any;
-      new (): any;
-      json: { (arg0: Document[]): void; new (): any };
-      end: { (arg0: string): void; new (): any };
-    };
-    setHeader: (arg0: string, arg1: string[]) => void;
+export default async (
+  req:
+    | any
+    | NextApiRequest
+    | (IncomingMessage & { cookies: Partial<{ [key: string]: string }> }),
+  res: any | ServerResponse<IncomingMessage> | NextApiResponse
+) => {
+  const session = await getServerSession(req, res, authOptions);
+  const userEmail = (session as { user: { email: string } })?.user?.email;
+
+  if (!userEmail) {
+    res.status(401).json({ message: 'Unauthorized' });
+    return;
   }
-) {
   if (req.method === 'GET') {
     try {
       const client = await clientPromise;
@@ -30,6 +35,7 @@ export default async function handler(
               maxWpm: { $max: '$typingHistory.wpm' },
             },
           },
+          { $project: { _id: 0, name: 1, maxWpm: 1 } }, // Exclude _id field and include name and maxWpm fields
           { $sort: { maxWpm: -1 } },
           { $limit: 10 },
         ])
@@ -44,4 +50,4 @@ export default async function handler(
     res.setHeader('Allow', ['GET']);
     res.status(405).end(`Method ${req.method} Not Allowed`);
   }
-}
+};

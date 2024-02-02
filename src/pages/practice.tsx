@@ -34,7 +34,6 @@ const Practice = () => {
 
   useEffect(() => {
     if (currentSlide === 0 || currentSlide === 2) {
-      console.log(`Reloading data on slide ${currentSlide}`);
       reloadData();
     }
   }, [currentSlide]);

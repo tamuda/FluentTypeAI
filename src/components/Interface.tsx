@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import data from '../../public/text.json';
 
-const wordCount = 40;
+const wordCount = 4;
 
 function getRandomText() {
   const wordList: (string | undefined)[] = [];
@@ -21,7 +21,6 @@ function getRandomText() {
   return wordList.length > 0 ? wordList : ['Error: No text found. Try again!'];
 }
 
-// Extending the props definition to include the typingState prop
 interface InterfaceProps {
   user: Session;
   typingState: (isFinished: boolean) => void;
@@ -135,7 +134,6 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
         },
         body: JSON.stringify({
           wpm,
-          userEmail: email,
         }),
       });
     } catch (error) {

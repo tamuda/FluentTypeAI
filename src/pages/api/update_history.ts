@@ -1,23 +1,28 @@
-import clientPromise from '../../../lib/mongodb';
+import type { IncomingMessage, ServerResponse } from 'http';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { getServerSession } from 'next-auth/next';
 
-export default async function handler(
-  req: { method: string; body: { wpm: any; userEmail: any } },
-  res: {
-    status: (arg0: number) => {
-      (): any;
-      new (): any;
-      json: { (arg0: { message: string }): void; new (): any };
-      end: { (arg0: string): void; new (): any };
-    };
-    setHeader: (arg0: string, arg1: string[]) => void;
+import clientPromise from '../../../lib/mongodb';
+import authOptions from './auth/[...nextauth]';
+
+export default async (
+  req:
+    | any
+    | NextApiRequest
+    | (IncomingMessage & { cookies: Partial<{ [key: string]: string }> }),
+  res: any | ServerResponse<IncomingMessage> | NextApiResponse
+) => {
+  const session = await getServerSession(req, res, authOptions);
+  const userEmail = (session as { user: { email: string } })?.user?.email;
+
+  if (!userEmail) {
+    res.status(401).json({ message: 'Unauthorized' });
+    return;
   }
-) {
+
   if (req.method === 'POST') {
     try {
-      const { wpm, userEmail } = req.body;
-      if (!userEmail) {
-        return res.status(400).json({ message: 'User email is required' });
-      }
+      const { wpm } = req.body;
 
       const client = await clientPromise;
       const db = client.db('fluenttype');
@@ -49,4 +54,4 @@ export default async function handler(
     res.setHeader('Allow', ['POST']);
     res.status(405).end(`Method ${req.method} Not Allowed`);
   }
-}
+};
