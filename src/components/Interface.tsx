@@ -74,7 +74,6 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
       }
     }
 
-    // When the user types, check against the current word plus space for a match.
     const currentWordWithSpace = typingText[wordIndex] + ' ';
     const isCorrectUpToSpace = currentInput === currentWordWithSpace;
 
@@ -147,7 +146,11 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
           key={charIndex}
           style={{
             textDecoration: isCorrect || isError ? 'line-through' : 'none',
-            color: isError ? 'red' : isCorrect ? 'blue' : 'inherit',
+            color: isError
+              ? 'red'
+              : isCorrect
+              ? 'rgba(0, 20, 255, 0.7)'
+              : 'inherit',
           }}
         >
           {char}
