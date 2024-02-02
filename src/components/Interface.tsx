@@ -34,6 +34,7 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
   const [wpm, setWpm] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
   const [hasStartedTyping, setHasStartedTyping] = useState(false);
+  const [displayedWPM, setDisplayedWPM] = useState(0);
   const firstName = user.user?.name?.split(' ')[0];
   const email = user.user?.email;
   const inputRef = useRef<HTMLInputElement>(null);
@@ -41,11 +42,11 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
   function getPlaceholderMessage(wpm: number) {
     if (wpm === 0) {
       return `Welcome to the practice grounds, ${firstName}!`;
-    } else if (wpm < 20) {
+    } else if (wpm < 30) {
       return `That's a good start ${firstName}, try to pick up the pace!`;
-    } else if (wpm < 40) {
+    } else if (wpm < 50) {
       return `You're doing great ${firstName}, keep pushing!`;
-    } else if (wpm < 60) {
+    } else if (wpm < 80) {
       return `Impressive speed ${firstName}, but can you go faster?`;
     } else {
       return `You're a typing master ${firstName}, incredible speed!`;
@@ -66,20 +67,29 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
     const currentInput = e.target.value;
     setInputValue(currentInput);
 
-    if (currentInput.length > 0 && !hasStartedTyping) {
+    if (!hasStartedTyping && currentInput.length > 0) {
       setHasStartedTyping(true);
+      if (!startTime) {
+        setStartTime(Date.now());
+      }
     }
 
-    if (!startTime) {
-      setStartTime(Date.now());
-    }
-
-    if (currentInput === typingText[wordIndex] && wordIndex === wordCount - 1) {
+    // Check if the current word matches and it's the last word
+    if (
+      currentInput.trim() === typingText[wordIndex] &&
+      wordIndex === wordCount - 1
+    ) {
+      // Calculate WPM here before setting isFinished to true
+      if (startTime) {
+        const durationInMinutes = (Date.now() - startTime) / 60000;
+        const calculatedWPM = Math.floor((wordIndex + 1) / durationInMinutes);
+        setWpm(calculatedWPM);
+      }
       setIsFinished(true);
       setInputValue('');
     } else if (currentInput.endsWith(' ') || currentInput.endsWith('\n')) {
       if (currentInput.trim() === typingText[wordIndex]) {
-        setWordIndex(wordIndex + 1);
+        setWordIndex((prevIndex) => prevIndex + 1);
       }
       setInputValue('');
     }
@@ -164,8 +174,9 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
     if (isFinished) {
       updateTypingHistory();
       setHasStartedTyping(false);
+      setDisplayedWPM(wpm);
     }
-  }, [isFinished, wpm]);
+  }, [isFinished]);
 
   return (
     <div className="flex h-screen items-center justify-center">
@@ -184,7 +195,7 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
             </div>
             {isFinished && (
               <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
-                <p className="text-4xl font-bold">{`${wpm} WPM`}</p>
+                <p className="text-4xl font-bold">{`${displayedWPM} WPM`}</p>
                 {/* <div className="flex items-center justify-center space-x-4 text-sm">
                   <div className="inline-flex items-center">
                     <span className="inline-flex items-center justify-center rounded border border-black p-1 shadow-sm">
@@ -215,7 +226,7 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
             className="w-full rounded-lg p-2 outline-none"
             placeholder={
               !hasStartedTyping
-                ? getPlaceholderMessage(isFinished ? wpm : 0)
+                ? getPlaceholderMessage(isFinished ? displayedWPM : 0)
                 : ''
             }
             value={inputValue}
