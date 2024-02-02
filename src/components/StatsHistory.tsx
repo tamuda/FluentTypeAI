@@ -71,15 +71,20 @@ const StatsHistory = ({ user }: { user: any }) => {
               </tr>
             </thead>
             <tbody>
-              {history.map((session, index) => (
-                <tr key={index} className="border-b">
-                  <td className="text-center">{index + 1}</td>
-                  <td className="text-center">{session.wpm}</td>
-                  <td className="text-center">
-                    {new Date(session.time).toLocaleString()}
-                  </td>
-                </tr>
-              ))}
+              {history
+                .sort(
+                  (a, b) =>
+                    new Date(b.time).getTime() - new Date(a.time).getTime()
+                )
+                .map((session, index) => (
+                  <tr key={index} className="border-b">
+                    <td className="text-center">{history.length - index}</td>
+                    <td className="text-center">{session.wpm}</td>
+                    <td className="text-center">
+                      {new Date(session.time).toLocaleString()}
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
