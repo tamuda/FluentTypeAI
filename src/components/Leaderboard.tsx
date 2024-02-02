@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 interface TopTyper {
-  name: string;
+  username: string;
   maxWpm: number;
   accuracy: number;
 }
@@ -9,6 +9,29 @@ interface TopTyper {
 const TopTypersLeaderboard = () => {
   const [topTypers, setTopTypers] = useState<TopTyper[] | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(true);
+  const [username, setUsername] = useState('');
+
+  const fetchUsername = async () => {
+    try {
+      const response = await fetch(`/api/get_username`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch history');
+      }
+
+      const data = await response.json();
+      setUsername(data.username);
+    } catch (error) {
+      console.error('Failed to fetch history:', error);
+    }
+  };
+
+  fetchUsername();
 
   useEffect(() => {
     const fetchTopTypers = async () => {
@@ -44,7 +67,7 @@ const TopTypersLeaderboard = () => {
         <div role="status">
           <svg
             aria-hidden="true"
-            className="size-10 pb-40 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600"
+            className="size-10 animate-spin fill-blue-600 pb-40 text-gray-200 dark:text-gray-600"
             viewBox="0 0 100 101"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -81,7 +104,15 @@ const TopTypersLeaderboard = () => {
               {topTypers?.map((typer, index) => (
                 <tr key={index} className="border-b">
                   <td className="text-center">{index + 1}</td>
-                  <td className="text-center">{typer.name}</td>
+                  <td
+                    className={`text-center ${
+                      typer.username === username ? 'font-bold' : ''
+                    }`}
+                  >
+                    {typer.username === username
+                      ? `${typer.username} (You)`
+                      : typer.username}
+                  </td>
                   <td className="text-center">{typer.maxWpm}</td>
                 </tr>
               ))}

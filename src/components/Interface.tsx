@@ -79,22 +79,16 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
     const isCorrectUpToSpace = currentInput === currentWordWithSpace;
 
     if (isCorrectUpToSpace) {
-      // If the input exactly matches the current word plus the space, move to the next word
       setWordIndex((prevIndex) => prevIndex + 1);
-      setInputValue(''); // Reset input for the next word
+      setInputValue('');
     } else if (currentInput.endsWith(' ') && !isCorrectUpToSpace) {
-      // If the user types a space but the word is incorrect, do not reset input
-      // Show the space as an incorrect character by not clearing the input
-      // Prevent moving to the next word automatically
     }
 
-    // Check if the typing text is finished
     const trimmedInput = currentInput.trim();
     if (
       trimmedInput === typingText[wordIndex] &&
       wordIndex === typingText.length - 1
     ) {
-      // If the last word is correctly typed, finish typing
       if (startTime) {
         const durationInMinutes = (Date.now() - startTime) / 60000;
         const calculatedWPM = Math.floor((wordIndex + 1) / durationInMinutes);

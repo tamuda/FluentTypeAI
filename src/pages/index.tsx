@@ -12,7 +12,6 @@ const Index = () => {
   const router = useRouter();
 
   useEffect(() => {
-    // Check if the user is authenticated and not redirected from /practice
     if (session && router.query.from !== 'practice') {
       router.push('/practice');
     }

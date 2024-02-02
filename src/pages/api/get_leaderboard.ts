@@ -31,11 +31,11 @@ const getLeaderboard = async (
           {
             $group: {
               _id: '$email',
-              name: { $first: '$name' },
+              username: { $first: '$username' },
               maxWpm: { $max: '$typingHistory.wpm' },
             },
           },
-          { $project: { _id: 0, name: 1, maxWpm: 1 } }, // Exclude _id field and include name and maxWpm fields
+          { $project: { _id: 0, username: 1, maxWpm: 1 } },
           { $sort: { maxWpm: -1 } },
           { $limit: 10 },
         ])

@@ -1,5 +1,6 @@
 import GoogleProvider from 'next-auth/providers/google';
 import NextAuth from 'node_modules/next-auth';
+import { generateUsername } from 'unique-username-generator';
 
 import clientPromise from '../../../../lib/mongodb';
 
@@ -30,11 +31,14 @@ export default NextAuth({
           email: user.email,
         });
         if (!existingUser) {
+          const username = generateUsername();
+
           await usersCollection.insertOne({
             email: user.email,
             name: user.name,
             googleId: profile?.sub,
             typingHistory: [],
+            username: username,
           });
         }
 
