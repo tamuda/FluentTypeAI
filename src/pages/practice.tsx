@@ -69,8 +69,9 @@ const Practice = () => {
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth="1.5"
+            color="gray"
             stroke="currentColor"
-            className="size-10"
+            className="size-10 hover:size-12"
           >
             <path
               strokeLinecap="round"
@@ -104,8 +105,9 @@ const Practice = () => {
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth="1.5"
+            color="gray"
             stroke="currentColor"
-            className="size-10"
+            className="size-10 hover:size-12"
           >
             <path
               strokeLinecap="round"

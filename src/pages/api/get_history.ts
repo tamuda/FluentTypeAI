@@ -5,7 +5,7 @@ import { getServerSession } from 'next-auth/next';
 import clientPromise from '../../../lib/mongodb';
 import authOptions from './auth/[...nextauth]';
 
-export default async (
+const getHistory = async (
   req:
     | any
     | NextApiRequest
@@ -37,3 +37,5 @@ export default async (
     res.status(500).json({ message: 'Server Error' });
   }
 };
+
+export default getHistory;

@@ -90,7 +90,7 @@ const StatsHistory = ({ user }: { user: any }) => {
         </div>
       </div>
       <div className="m-4 flex flex-1 flex-col justify-center bg-white bg-gradient-to-r from-teal-50 to-blue-100 p-4 text-center shadow-lg md:max-h-[50vh] md:max-w-[45vw]">
-        <h2 className="mb-4 text-xl font-bold">Progression</h2>
+        <h2 className="mb-4 text-xl font-bold">Typing Progression</h2>
         {history ? (
           <Line
             data={{

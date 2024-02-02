@@ -5,7 +5,7 @@ import { getServerSession } from 'next-auth/next';
 import clientPromise from '../../../lib/mongodb';
 import authOptions from './auth/[...nextauth]';
 
-export default async (
+const updateHistory = async (
   req:
     | any
     | NextApiRequest
@@ -55,3 +55,5 @@ export default async (
     res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 };
+
+export default updateHistory;

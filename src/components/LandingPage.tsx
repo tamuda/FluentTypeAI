@@ -5,7 +5,7 @@ import TypedLine from './TypedLine';
 
 function LandingPage() {
   return (
-    <div className="flex-grow flex items-center justify-center overflow-y-auto px-4">
+    <div className="grow flex items-center justify-center overflow-y-auto px-4">
       <section className="flex flex-col items-center justify-center overflow-y-auto">
         <div className="text-center">
           <h1 className="font-extrabold tracking-tighter" data-aos="zoom-y-out">
