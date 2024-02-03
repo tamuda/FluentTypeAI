@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import data from '../../public/text.json';
 
-const wordCount = 35;
+const wordCount = 5;
 
 function getRandomText() {
   const wordList: (string | undefined)[] = [];
@@ -162,11 +162,14 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
   const updateTypingHistory = async () => {
     if (!isFinished || !wpm || !email || wpm > 250) return;
 
+    const timestamp = new Date().getTime();
+
     try {
       await fetch('/api/update_history', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'X-Timestamp': timestamp.toString(), // bye bye replay attacks!
         },
         body: JSON.stringify({
           wpm,
