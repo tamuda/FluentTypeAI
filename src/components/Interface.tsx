@@ -159,6 +159,14 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
     });
   };
 
+  useEffect(() => {
+    if (isFinished) {
+      updateTypingHistory();
+      setHasStartedTyping(false);
+      setDisplayedWPM(wpm);
+    }
+  }, [isFinished]);
+
   const updateTypingHistory = async () => {
     if (!isFinished || !wpm || !email || wpm > 250) return;
 
@@ -179,14 +187,6 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
       console.error('Error updating typing history', error);
     }
   };
-
-  useEffect(() => {
-    if (isFinished) {
-      updateTypingHistory();
-      setHasStartedTyping(false);
-      setDisplayedWPM(wpm);
-    }
-  }, [isFinished]);
 
   return (
     <div className="flex h-screen items-center justify-center">

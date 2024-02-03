@@ -46,7 +46,15 @@ const StatsHistory = ({ user }: { user: any }) => {
         }
 
         const data = await response.json();
-        setHistory(data.typingHistory);
+        let history = data.typingHistory;
+        history.sort(
+          (
+            a: { time: string | number | Date },
+            b: { time: string | number | Date }
+          ) => new Date(b.time).getTime() - new Date(a.time).getTime()
+        );
+
+        setHistory(history);
       } catch (error) {
         console.error('Failed to fetch history:', error);
       }
@@ -71,20 +79,15 @@ const StatsHistory = ({ user }: { user: any }) => {
               </tr>
             </thead>
             <tbody>
-              {history
-                .sort(
-                  (a, b) =>
-                    new Date(b.time).getTime() - new Date(a.time).getTime()
-                )
-                .map((session, index) => (
-                  <tr key={index} className="border-b">
-                    <td className="text-center">{history.length - index}</td>
-                    <td className="text-center">{session.wpm}</td>
-                    <td className="text-center">
-                      {new Date(session.time).toLocaleString()}
-                    </td>
-                  </tr>
-                ))}
+              {history.map((session, index) => (
+                <tr key={index} className="border-b">
+                  <td className="text-center">{history.length - index}</td>
+                  <td className="text-center">{session.wpm}</td>
+                  <td className="text-center">
+                    {new Date(session.time).toLocaleString()}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -98,7 +101,7 @@ const StatsHistory = ({ user }: { user: any }) => {
               datasets: [
                 {
                   label: 'WPM',
-                  data: history.map((item) => item.wpm),
+                  data: [...history.map((item) => item.wpm)].reverse(),
                   borderColor: 'rgb(75, 192, 192)',
                   tension: 0.1,
                   trendlineLinear: {

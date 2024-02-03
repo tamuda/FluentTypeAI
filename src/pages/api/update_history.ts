@@ -30,7 +30,7 @@ const updateHistory = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     try {
-      const { wpm } = req.body;
+      const { wpm }: { wpm: number } = req.body;
 
       if (typeof wpm !== 'number' || wpm < 0 || wpm > 250) {
         res.status(400).json({ message: 'Invalid wpm value' });
@@ -41,7 +41,7 @@ const updateHistory = async (req: NextApiRequest, res: NextApiResponse) => {
       const db = client.db('fluenttype');
       const usersCollection = db.collection('users');
 
-      const typingData = {
+      const typingData: { time: Date; wpm: number } = {
         time: new Date(),
         wpm,
       };
