@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import data from '../../public/text.json';
 
-const wordCount = 5;
+const wordCount = 20;
 
 function getRandomText() {
   const wordList: (string | undefined)[] = [];
@@ -36,6 +36,8 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
   const [hasStartedTyping, setHasStartedTyping] = useState(false);
   const [displayedWPM, setDisplayedWPM] = useState(0);
   const [mistakes, setMistakes] = useState({});
+  const [sessionMistakes, setSessionMistakes] = useState({});
+  const [totalSessionMistakes, setTotalSessionMistakes] = useState(0);
   const firstName = user.user?.name?.split(' ')[0];
   const email = user.user?.email;
   const inputRef = useRef<HTMLInputElement>(null);
@@ -132,6 +134,11 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
             ...prevMistakes,
             [mistakeKey]: (prevMistakes[mistakeKey] || 0) + 1,
           }));
+          setSessionMistakes((prevMistakes: Record<string, number>) => ({
+            ...prevMistakes,
+            [mistakeKey]: (prevMistakes[mistakeKey] || 0) + 1,
+          }));
+          console.log('Adding session mistake', sessionMistakes);
         }
       }
     }
@@ -160,7 +167,8 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
     setIsFinished(false);
     inputRef.current?.focus();
     typingState(false);
-    // setMistakes({});
+    setSessionMistakes({});
+    setTotalSessionMistakes(0);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -218,6 +226,12 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
       updateTypingHistory();
       setHasStartedTyping(false);
       setDisplayedWPM(wpm);
+      setTotalSessionMistakes(
+        Object.values<number>(sessionMistakes).reduce<number>(
+          (acc: number, curr: number) => acc + curr,
+          0
+        )
+      );
     }
   }, [isFinished, mistakes]);
 
@@ -259,22 +273,23 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
               ))}
             </div>
             {isFinished && (
-              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
-                <p className="text-4xl font-bold">{`${displayedWPM} WPM`}</p>
-                {/* <div className="flex items-center justify-center space-x-4 text-sm">
-                  <div className="inline-flex items-center">
-                    <span className="inline-flex items-center justify-center rounded border border-black p-1 shadow-sm">
-                      &#x2190;
-                    </span>
-                    <span className="ml-2">Leaderboard</span>
-                  </div>
-                  <div className="inline-flex items-center">
-                    <span className="mr-2">Stats & History</span>
-                    <span className="inline-flex items-center justify-center rounded border border-black p-1 shadow-sm">
-                      &#x2192;
-                    </span>
-                  </div>
-                </div> */}
+              <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-row items-center justify-center space-x-4 text-center">
+                <p className="self-center">
+                  {`Mistakes: ${totalSessionMistakes} `}
+                  <span role="img" aria-label="warning">
+                    ⚠️
+                  </span>
+                </p>
+                <p className="self-center text-4xl font-bold">{`${displayedWPM} WPM`}</p>
+                <p className="self-center">{`Accuracy: ${
+                  (console.log('sessionMistakes', sessionMistakes),
+                  console.log('totalSessionMistakes', totalSessionMistakes),
+                  100 -
+                    (Object.keys(sessionMistakes).length /
+                      (wordIndex + 1) /
+                      (wordCount * 5)) *
+                      100)
+                }%`}</p>
               </div>
             )}
           </div>
