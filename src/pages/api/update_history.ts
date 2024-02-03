@@ -31,6 +31,7 @@ const updateHistory = async (req: NextApiRequest, res: NextApiResponse) => {
 
     try {
       const { wpm }: { wpm: number } = req.body;
+      const { mistakes }: { mistakes: Record<string, number> } = req.body;
 
       if (typeof wpm !== 'number' || wpm < 0 || wpm > 250) {
         res.status(400).json({ message: 'Invalid wpm value' });
@@ -46,15 +47,18 @@ const updateHistory = async (req: NextApiRequest, res: NextApiResponse) => {
         wpm,
       };
 
+      const mistakeUpdates: Record<string, number> = Object.entries(
+        mistakes
+      ).reduce((acc: Record<string, number>, [key, value]) => {
+        acc[`mistakes.${key}`] = (acc[`mistakes.${key}`] || 0) + value;
+        return acc;
+      }, {});
+
       await usersCollection.updateOne(
         { email: userEmail },
         {
-          $push: {
-            typingHistory: {
-              $each: [typingData],
-              $slice: -25,
-            },
-          },
+          $inc: mistakeUpdates,
+          $push: { typingHistory: { $each: [typingData], $slice: -25 } },
         }
       );
 

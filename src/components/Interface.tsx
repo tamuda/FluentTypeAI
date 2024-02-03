@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import data from '../../public/text.json';
 
-const wordCount = 50;
+const wordCount = 5;
 
 function getRandomText() {
   const wordList: (string | undefined)[] = [];
@@ -35,9 +35,41 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
   const [isFinished, setIsFinished] = useState(false);
   const [hasStartedTyping, setHasStartedTyping] = useState(false);
   const [displayedWPM, setDisplayedWPM] = useState(0);
+  const [mistakes, setMistakes] = useState({});
   const firstName = user.user?.name?.split(' ')[0];
   const email = user.user?.email;
   const inputRef = useRef<HTMLInputElement>(null);
+
+  async function fetchTypingMistakes() {
+    try {
+      const response = await fetch('/api/get_mistakes', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const { mistakes } = await response.json();
+      return mistakes;
+    } catch (error) {
+      console.error('Failed to fetch typing mistakes:', error);
+      return null;
+    }
+  }
+
+  useEffect(() => {
+    if (!hasStartedTyping) {
+      fetchTypingMistakes().then((mistakes) => {
+        if (mistakes) {
+          setMistakes(mistakes);
+        }
+      });
+    }
+  }, [hasStartedTyping]);
 
   function getPlaceholderMessage(wpm: number) {
     if (wpm === 0) {
@@ -83,6 +115,27 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
     } else if (currentInput.endsWith(' ') && !isCorrectUpToSpace) {
     }
 
+    if (currentInput.length > 1) {
+      const lastChar = currentInput.slice(-1);
+      const expectedChar = typingText[wordIndex]?.[currentInput.length - 1];
+
+      if (
+        lastChar !== expectedChar &&
+        currentInput.length <= (typingText[wordIndex]?.length ?? 0)
+      ) {
+        const prevChar = currentInput.slice(-2, -1);
+        const correctSequence = prevChar + (expectedChar ?? '');
+
+        if (expectedChar && correctSequence.length === 2) {
+          const mistakeKey = `${correctSequence}`;
+          setMistakes((prevMistakes: Record<string, number>) => ({
+            ...prevMistakes,
+            [mistakeKey]: (prevMistakes[mistakeKey] || 0) + 1,
+          }));
+        }
+      }
+    }
+
     const trimmedInput = currentInput.trim();
     if (
       trimmedInput === typingText[wordIndex] &&
@@ -107,6 +160,7 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
     setIsFinished(false);
     inputRef.current?.focus();
     typingState(false);
+    // setMistakes({});
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -165,7 +219,7 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
       setHasStartedTyping(false);
       setDisplayedWPM(wpm);
     }
-  }, [isFinished]);
+  }, [isFinished, mistakes]);
 
   const updateTypingHistory = async () => {
     if (!isFinished || !wpm || !email || wpm > 250) return;
@@ -177,10 +231,11 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-Timestamp': timestamp.toString(), // bye bye replay attacks!
+          'X-Timestamp': timestamp.toString(),
         },
         body: JSON.stringify({
           wpm,
+          mistakes,
         }),
       });
     } catch (error) {

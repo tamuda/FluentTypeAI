@@ -39,6 +39,7 @@ export default NextAuth({
             googleId: profile?.sub,
             typingHistory: [],
             username: username,
+            mistakes: [],
           });
         }
 
