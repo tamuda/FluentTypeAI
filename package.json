@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@next/bundle-analyzer": "^14.1.0",
+    "@tensorflow/tfjs": "^4.17.0",
     "@types/typed.js": "^2.0.9",
     "chart": "^0.1.2",
     "chart.js": "^4.4.1",

@@ -71,25 +71,30 @@ const TopTypersLeaderboard = () => {
   return (
     <div className="flex h-screen flex-col items-center justify-center p-6 pb-40 md:flex-row">
       <div className="m-4 flex min-h-[33vh] min-w-[66vw] flex-col justify-center bg-white bg-gradient-to-r from-blue-100 to-teal-50 p-4 text-center shadow-xl">
-        <h1 className="mb-4 text-xl font-bold">Weekly Leaderboard (top 10)</h1>
+        <h1 className="mb-4 text-2xl font-bold">
+          Highest Average WPM Leaderboard
+        </h1>
         <div className="overflow-auto">
           <table className="w-full bg-white">
             <thead>
               <tr className="bg-blue-200">
                 <th className="text-center">Rank</th>
                 <th className="text-center">Name</th>
-                <th className="text-center">WPM</th>
+                <th className="text-center">Mean-WPM</th>
               </tr>
             </thead>
             <tbody>
               {topTypers?.map((typer, index) => (
-                <tr key={index} className="border-b">
+                <tr
+                  key={index}
+                  className={`text-center ${
+                    typer.username === username
+                      ? 'border-b font-bold'
+                      : 'border-b'
+                  }`}
+                >
                   <td className="text-center">{index + 1}</td>
-                  <td
-                    className={`text-center ${
-                      typer.username === username ? 'font-bold' : ''
-                    }`}
-                  >
+                  <td className="text-center">
                     {typer.username === username
                       ? `${typer.username} (You)`
                       : typer.username}
