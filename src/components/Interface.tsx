@@ -38,7 +38,6 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
   const [mistakes, setMistakes] = useState({});
   const [sessionMistakes, setSessionMistakes] = useState({});
   const [totalSessionMistakes, setTotalSessionMistakes] = useState(0);
-  const [accuracy, setAccuracy] = useState(0);
   const hasUpdatedRef = useRef(false);
   const firstName = user.user?.name?.split(' ')[0];
   const email = user.user?.email;
@@ -58,7 +57,6 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
       }
 
       const { mistakes } = await response.json();
-      console.log('Fetched typing mistakes:', mistakes);
       return mistakes;
     } catch (error) {
       console.error('Failed to fetch typing mistakes:', error);
@@ -141,7 +139,6 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
             ...prevMistakes,
             [mistakeKey]: (prevMistakes[mistakeKey] || 0) + 1,
           }));
-          console.log('Adding session mistake', sessionMistakes);
         }
       }
     }
@@ -172,7 +169,6 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
     typingState(false);
     setSessionMistakes({});
     setTotalSessionMistakes(0);
-    setAccuracy(0);
     setMistakes({});
     hasUpdatedRef.current = false;
   };
@@ -230,10 +226,7 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
 
   useEffect(() => {
     if (isFinished && !hasUpdatedRef.current) {
-      console.log('Typing history updated');
       setDisplayedWPM(wpm);
-      updateTypingHistory();
-      setHasStartedTyping(false);
       setTotalSessionMistakes(
         Object.values<number>(sessionMistakes).reduce<number>(
           (acc: number, curr: number) => acc + curr,
@@ -244,25 +237,34 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
         (total, word) => total + (word?.length || 0),
         0
       );
-      setAccuracy(
-        Math.floor(((charCount - totalSessionMistakes) / charCount) * 100)
+      updateTypingHistory(
+        Math.floor(
+          ((charCount -
+            Object.values<number>(sessionMistakes).reduce<number>(
+              (acc: number, curr: number) => acc + curr,
+              0
+            )) /
+            charCount) *
+            100
+        ),
+        Object.values<number>(sessionMistakes).reduce<number>(
+          (acc: number, curr: number) => acc + curr,
+          0
+        )
       );
+      setHasStartedTyping(false);
 
       hasUpdatedRef.current = true;
     }
   }, [isFinished, mistakes, sessionMistakes, wpm, email]);
 
-  const updateTypingHistory = async () => {
+  const updateTypingHistory = async (
+    accuracy: number,
+    totalSessionMistakes: number
+  ) => {
     if (!isFinished || !wpm || !email || wpm > 250) return;
 
     const timestamp = new Date().getTime();
-
-    console.log('Updating typing history', {
-      wpm,
-      mistakes,
-      accuracy,
-      totalSessionMistakes,
-    });
 
     try {
       await fetch('/api/update_history', {
@@ -307,7 +309,21 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
                   </span>
                 </p>
                 <p className="self-center text-4xl font-bold">{`${displayedWPM} WPM`}</p>
-                <p className="self-center">{`Accuracy: ${accuracy}%`}</p>
+                <p className="self-center">{`Accuracy: ${Math.floor(
+                  ((typingText.reduce(
+                    (total, word) => total + (word?.length || 0),
+                    0
+                  ) -
+                    Object.values<number>(sessionMistakes).reduce<number>(
+                      (acc: number, curr: number) => acc + curr,
+                      0
+                    )) /
+                    typingText.reduce(
+                      (total, word) => total + (word?.length || 0),
+                      0
+                    )) *
+                    100
+                )}%`}</p>
               </div>
             )}
           </div>

@@ -36,7 +36,10 @@ const updateHistory = async (req: NextApiRequest, res: NextApiResponse) => {
       const { totalSessionMistakes }: { totalSessionMistakes: number } =
         req.body;
 
-      console.log(mistakes);
+      console.log('wpm:', wpm);
+      console.log('mistakes:', mistakes);
+      console.log('accuracy:', accuracy);
+      console.log('totalSessionMistakes:', totalSessionMistakes);
 
       if (typeof wpm !== 'number' || wpm < 0 || wpm > 250) {
         res.status(400).json({ message: 'Invalid wpm value' });
@@ -59,19 +62,37 @@ const updateHistory = async (req: NextApiRequest, res: NextApiResponse) => {
         totalSessionMistakes,
       };
 
-      const mistakeUpdates: Record<string, number> = Object.entries(
-        mistakes
-      ).reduce((acc: Record<string, number>, [key, value]) => {
-        acc[`mistakes.${key}`] =
-          (acc[`mistakes.${key}` as keyof typeof acc] || 0) + value;
-        return acc;
-      }, {});
+      const userDoc = await usersCollection.findOne({ email: userEmail });
+      const existingMistakes = userDoc?.mistakes || {};
+
+      const mergedMistakes = { ...existingMistakes };
+      Object.entries(mistakes).forEach(([key, value]) => {
+        if (mergedMistakes[key]) {
+          mergedMistakes[key] += value;
+        } else {
+          mergedMistakes[key] = value;
+        }
+      });
+
+      // Sort merged mistakes by value and keep the top 5
+      const topMistakes: Record<string, number> = Object.entries(mergedMistakes)
+        .sort(
+          (a: [string, unknown], b: [string, unknown]) =>
+            (b[1] as number) - (a[1] as number)
+        )
+        .slice(0, 5)
+        .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
 
       await usersCollection.updateOne(
         { email: userEmail },
         {
-          $inc: mistakeUpdates,
-          $push: { typingHistory: { $each: [typingData], $slice: -25 } },
+          $set: { mistakes: topMistakes },
+          $push: {
+            typingHistory: {
+              $each: [typingData],
+              $slice: -25,
+            },
+          },
         }
       );
 
