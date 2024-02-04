@@ -275,7 +275,7 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
         },
         body: JSON.stringify({
           wpm,
-          mistakes,
+          mistakes: sessionMistakes,
           accuracy,
           totalSessionMistakes,
         }),

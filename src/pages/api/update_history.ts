@@ -36,11 +36,6 @@ const updateHistory = async (req: NextApiRequest, res: NextApiResponse) => {
       const { totalSessionMistakes }: { totalSessionMistakes: number } =
         req.body;
 
-      console.log('wpm:', wpm);
-      console.log('mistakes:', mistakes);
-      console.log('accuracy:', accuracy);
-      console.log('totalSessionMistakes:', totalSessionMistakes);
-
       if (typeof wpm !== 'number' || wpm < 0 || wpm > 250) {
         res.status(400).json({ message: 'Invalid wpm value' });
         return;
