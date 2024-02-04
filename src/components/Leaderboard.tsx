@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 interface TopTyper {
   username: string;
   maxWpm: number;
-  accuracy: number;
+  meanAccuracy: number;
 }
 
 const TopTypersLeaderboard = () => {
@@ -80,7 +80,8 @@ const TopTypersLeaderboard = () => {
               <tr className="bg-blue-200">
                 <th className="text-center">Rank</th>
                 <th className="text-center">Name</th>
-                <th className="text-center">Mean-WPM</th>
+                <th className="text-center">Max WPM</th>
+                <th className="text-center">Mean Accuracy</th>
               </tr>
             </thead>
             <tbody>
@@ -100,6 +101,7 @@ const TopTypersLeaderboard = () => {
                       : typer.username}
                   </td>
                   <td className="text-center">{typer.maxWpm}</td>
+                  <td className="text-center">{typer.meanAccuracy}%</td>
                 </tr>
               ))}
             </tbody>
