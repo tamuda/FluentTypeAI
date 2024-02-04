@@ -39,6 +39,7 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
   const [sessionMistakes, setSessionMistakes] = useState({});
   const [totalSessionMistakes, setTotalSessionMistakes] = useState(0);
   const [accuracy, setAccuracy] = useState(0);
+  const hasUpdatedRef = useRef(false);
   const firstName = user.user?.name?.split(' ')[0];
   const email = user.user?.email;
   const inputRef = useRef<HTMLInputElement>(null);
@@ -57,6 +58,7 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
       }
 
       const { mistakes } = await response.json();
+      console.log('Fetched typing mistakes:', mistakes);
       return mistakes;
     } catch (error) {
       console.error('Failed to fetch typing mistakes:', error);
@@ -172,6 +174,7 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
     setTotalSessionMistakes(0);
     setAccuracy(0);
     setMistakes({});
+    hasUpdatedRef.current = false;
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -198,6 +201,7 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
 
   const renderWord = (word: string, index: number) => {
     const wordWithOptionalSpace = index === wordCount - 1 ? word : `${word} `;
+
     return wordWithOptionalSpace.split('').map((char, charIndex) => {
       const isCorrect =
         index < wordIndex ||
@@ -225,7 +229,7 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
   };
 
   useEffect(() => {
-    if (isFinished) {
+    if (isFinished && !hasUpdatedRef.current) {
       console.log('Typing history updated');
       setDisplayedWPM(wpm);
       updateTypingHistory();
@@ -243,6 +247,8 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
       setAccuracy(
         Math.floor(((charCount - totalSessionMistakes) / charCount) * 100)
       );
+
+      hasUpdatedRef.current = true;
     }
   }, [isFinished, mistakes, sessionMistakes, wpm, email]);
 
@@ -250,6 +256,13 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
     if (!isFinished || !wpm || !email || wpm > 250) return;
 
     const timestamp = new Date().getTime();
+
+    console.log('Updating typing history', {
+      wpm,
+      mistakes,
+      accuracy,
+      totalSessionMistakes,
+    });
 
     try {
       await fetch('/api/update_history', {
