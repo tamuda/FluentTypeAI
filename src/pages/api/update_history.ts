@@ -69,13 +69,12 @@ const updateHistory = async (req: NextApiRequest, res: NextApiResponse) => {
         }
       });
 
-      // Sort merged mistakes by value and keep the top 5
       const topMistakes: Record<string, number> = Object.entries(mergedMistakes)
         .sort(
           (a: [string, unknown], b: [string, unknown]) =>
             (b[1] as number) - (a[1] as number)
         )
-        .slice(0, 5)
+        .slice(0, 8)
         .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
 
       await usersCollection.updateOne(

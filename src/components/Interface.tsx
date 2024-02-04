@@ -36,6 +36,7 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
   const [hasStartedTyping, setHasStartedTyping] = useState(false);
   const [displayedWPM, setDisplayedWPM] = useState(0);
   const [mistakes, setMistakes] = useState({});
+  const [freezeMistakes, setFreezeMistakes] = useState({});
   const [sessionMistakes, setSessionMistakes] = useState({});
   const [totalSessionMistakes, setTotalSessionMistakes] = useState(0);
   const hasUpdatedRef = useRef(false);
@@ -69,6 +70,7 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
       fetchTypingMistakes().then((mistakes) => {
         if (mistakes) {
           setMistakes(mistakes);
+          setFreezeMistakes(mistakes);
         }
       });
     }
@@ -170,6 +172,7 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
     setSessionMistakes({});
     setTotalSessionMistakes(0);
     setMistakes({});
+    setFreezeMistakes({});
     hasUpdatedRef.current = false;
   };
 
@@ -195,7 +198,11 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
     };
   }, [isFinished]);
 
-  const renderWord = (word: string, index: number) => {
+  const renderWord = (
+    word: string,
+    index: number,
+    mistakes: Record<string, number>
+  ) => {
     const wordWithOptionalSpace = index === wordCount - 1 ? word : `${word} `;
 
     return wordWithOptionalSpace.split('').map((char, charIndex) => {
@@ -206,6 +213,17 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
         index === wordIndex &&
         inputValue[charIndex] !== char &&
         charIndex < inputValue.length;
+      const matchingSequence = `${char}${wordWithOptionalSpace[charIndex + 1]}`;
+      const reversedMatchingSequence = `${
+        wordWithOptionalSpace[charIndex - 1]
+      }${char}`;
+      const shouldHighlight =
+        mistakes[matchingSequence] ??
+        (0 > 0 || mistakes[reversedMatchingSequence]) ??
+        0 > 0;
+
+      console.log('shouldHighlight', shouldHighlight);
+
       return (
         <span
           key={charIndex}
@@ -216,6 +234,9 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
               : isCorrect
               ? 'rgba(0, 20, 255, 0.7)'
               : 'inherit',
+            background: shouldHighlight
+              ? 'rgba(255, 0, 0, 0.3)'
+              : 'transparent',
           }}
         >
           {char}
@@ -296,7 +317,7 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
             <div className={`roboto grow ${isFinished ? 'blur' : ''}`}>
               {typingText.map((word, index) => (
                 <span key={`${word}-${index}`}>
-                  {renderWord(word ?? '', index)}
+                  {renderWord(word ?? '', index, freezeMistakes)}
                 </span>
               ))}
             </div>
@@ -329,16 +350,13 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
                 <div className="flex items-center justify-center">
                   <div className="flex flex-wrap items-center gap-2">
                     {Object.entries(sessionMistakes)
-                      .slice(0, 10)
-                      .map(([mistake, count], index) => (
+                      .slice(0, 7)
+                      .map(([mistake, count]) => (
                         <span
                           key={mistake}
                           className="rounded  border-black bg-red-200 px-2.5 py-0.5 text-sm font-medium text-red-800 outline-black dark:bg-red-300 dark:text-red-900"
                         >
                           {`${mistake} : ${count}`}
-                          {index === 9 &&
-                            Object.entries(sessionMistakes).length > 10 &&
-                            '...'}
                         </span>
                       ))}
                   </div>

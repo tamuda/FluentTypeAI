@@ -13,15 +13,25 @@
 
 </p>
 
-A simple touch-typing practice tool that uses AI to predict your next typing mistake **_before you even make it_.**
+A simple touch-typing practice tool that uses AI to predict your next typing mistake **_before you even make it_**, so you can correct it in real-time.
 
 *>>> Minimalist.*  
-*>>> Distraction-free.*  
+*>>> Personalized.*  
 *>>> No ads, no tracking, no BS.*
 
-Just you and your keyboard, and some willpower to get better at typing.
+FluentTypeAI differs from other typing practice sites because it's helping you improve by learning your typing patterns, and giving you your tailored practice.
+
+No cookie cutter bs - why practice what you already do so well and waste time? That is why FluentTypeAI will tailor your typing text to use words that contain your mistake patterns. It will highlight your 2-letter sequences you most often get wrong before you even start typing. It's predicting your mistakes in real-time. It's like having a personal typing coach, but without the cost or the hassle. 🚀
+
+It's also open-source, so you can see exactly what's happening under the hood. No black boxes. 🕵️‍♂️
 
 ---
+
+## Features
+
+- **Personalized Practice**: FluentTypeAI collects your most common 2-letter mistakes and uses them to generate practice text that is tailored to your needs - meaning he more you mess up "th" and "he", the more you'll see them in your practice text.
+- **Weekly Leaderboard**: Compete with others and see how you rank in the weekly leaderboard.
+- **Stats**: Track your progress and see how you're improving over time.
 
 ## Demo
 
@@ -30,7 +40,8 @@ Just you and your keyboard, and some willpower to get better at typing.
 </p>
 
 > [!NOTE]  
-> AI features coming soon! Wanna pitch in? Or get an early preview? [Click here then!](https://s.surveyplanet.com/k6vwmtct)
+> OpenAI integration is coming soon! 🤖
+> Lots more features coming, [click here if you want to pitch in!](https://s.surveyplanet.com/k6vwmtct)
 
 ---
 
