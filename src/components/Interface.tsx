@@ -171,9 +171,15 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
     typingState(false);
     setSessionMistakes({});
     setTotalSessionMistakes(0);
-    setMistakes({});
     setFreezeMistakes({});
+    setMistakes({});
     hasUpdatedRef.current = false;
+    fetchTypingMistakes().then((mistakes) => {
+      if (mistakes) {
+        setMistakes(mistakes);
+        setFreezeMistakes(mistakes);
+      }
+    });
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -203,6 +209,7 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
     index: number,
     mistakes: Record<string, number>
   ) => {
+    console.log('mistakes', mistakes);
     const wordWithOptionalSpace = index === wordCount - 1 ? word : `${word} `;
 
     return wordWithOptionalSpace.split('').map((char, charIndex) => {
@@ -221,8 +228,6 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
         mistakes[matchingSequence] ??
         (0 > 0 || mistakes[reversedMatchingSequence]) ??
         0 > 0;
-
-      console.log('shouldHighlight', shouldHighlight);
 
       return (
         <span
@@ -330,7 +335,7 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
                       ⚠️
                     </span>
                   </p>
-                  <p className="self-center text-4xl font-bold">{`${displayedWPM} WPM`}</p>
+                  <p className="self-center text-3xl font-bold">{`${displayedWPM} WPM`}</p>
                   <p className="self-center">{`Accuracy: ${Math.floor(
                     ((typingText.reduce(
                       (total, word) => total + (word?.length || 0),
