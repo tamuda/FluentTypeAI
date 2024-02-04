@@ -101,7 +101,9 @@ const TopTypersLeaderboard = () => {
                       : typer.username}
                   </td>
                   <td className="text-center">{typer.maxWpm}</td>
-                  <td className="text-center">{typer.meanAccuracy}%</td>
+                  <td className="text-center">
+                    {Math.ceil(typer.meanAccuracy)}%
+                  </td>
                 </tr>
               ))}
             </tbody>

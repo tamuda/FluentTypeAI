@@ -147,12 +147,27 @@ const StatsHistory = ({ user }: { user: any }) => {
                   <td className="text-center">Average Accuracy</td>
                   <td className="text-center">
                     {history.length > 0
-                      ? Math.ceil(
+                      ? isNaN(
+                          Math.ceil(
+                            history.reduce(
+                              (acc, curr) => acc + curr.accuracy,
+                              0
+                            ) / history.length
+                          )
+                        ) ||
+                        Math.ceil(
                           history.reduce(
                             (acc, curr) => acc + curr.accuracy,
                             0
                           ) / history.length
-                        ) + '%'
+                        ) <= 0
+                        ? 'N/A'
+                        : Math.ceil(
+                            history.reduce(
+                              (acc, curr) => acc + curr.accuracy,
+                              0
+                            ) / history.length
+                          ) + '%'
                       : 'N/A'}
                   </td>
                 </tr>
@@ -191,19 +206,23 @@ const StatsHistory = ({ user }: { user: any }) => {
         </div>
         <div className="mb-4 flex-1 flex-col justify-center bg-white bg-gradient-to-r from-teal-50 to-blue-100 p-4 text-center shadow-lg md:max-h-[30vh] md:max-w-full">
           <h2 className="mb-2 text-xl font-bold">
-            Top 5 2-Letter Mistake Patterns
+            Most frequent mistakes made
           </h2>
           <div className="flex flex-wrap items-center justify-center gap-2 text-center">
-            {Object.entries(mistakes).map(([mistake, count]) => (
-              <span
-                key={mistake}
-                className="rounded border border-black bg-red-200 px-2.5 py-0.5 text-sm font-medium text-red-800 dark:bg-red-300 dark:text-red-900"
-              >
-                <span key={mistake} className="font-bold">
-                  {`${mistake} : ${count}`}
+            {Object.entries(mistakes).length > 0 ? (
+              Object.entries(mistakes).map(([mistake, count]) => (
+                <span
+                  key={mistake}
+                  className="rounded border border-black bg-red-200 px-2.5 py-0.5 text-sm font-medium text-red-800 dark:bg-red-300 dark:text-red-900"
+                >
+                  <span key={mistake} className="font-bold">
+                    {`${mistake} : ${count}`}
+                  </span>
                 </span>
-              </span>
-            ))}
+              ))
+            ) : (
+              <span className="text-black">None yet</span>
+            )}
           </div>
         </div>
       </div>

@@ -33,7 +33,7 @@ const getLeaderboard = async (
               _id: '$email',
               username: { $first: '$username' },
               maxWpm: { $max: '$typingHistory.wpm' },
-              meanAccuracy: { $avg: '$typingHistory.accuracy' }, // Correctly calculating mean accuracy
+              meanAccuracy: { $avg: '$typingHistory.accuracy' },
             },
           },
           { $project: { _id: 0, username: 1, maxWpm: 1, meanAccuracy: 1 } },
