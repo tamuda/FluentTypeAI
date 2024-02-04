@@ -32,6 +32,11 @@ const updateHistory = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       const { wpm }: { wpm: number } = req.body;
       const { mistakes }: { mistakes: Record<string, number> } = req.body;
+      const { accuracy }: { accuracy: number } = req.body;
+      const { totalSessionMistakes }: { totalSessionMistakes: number } =
+        req.body;
+
+      console.log(mistakes);
 
       if (typeof wpm !== 'number' || wpm < 0 || wpm > 250) {
         res.status(400).json({ message: 'Invalid wpm value' });
@@ -42,15 +47,23 @@ const updateHistory = async (req: NextApiRequest, res: NextApiResponse) => {
       const db = client.db('fluenttype');
       const usersCollection = db.collection('users');
 
-      const typingData: { time: Date; wpm: number } = {
+      const typingData: {
+        time: Date;
+        wpm: number;
+        accuracy: number;
+        totalSessionMistakes: number;
+      } = {
         time: new Date(),
         wpm,
+        accuracy,
+        totalSessionMistakes,
       };
 
       const mistakeUpdates: Record<string, number> = Object.entries(
         mistakes
       ).reduce((acc: Record<string, number>, [key, value]) => {
-        acc[`mistakes.${key}`] = (acc[`mistakes.${key}`] || 0) + value;
+        acc[`mistakes.${key}`] =
+          (acc[`mistakes.${key}` as keyof typeof acc] || 0) + value;
         return acc;
       }, {});
 

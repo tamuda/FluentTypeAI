@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import data from '../../public/text.json';
 
-const wordCount = 20;
+const wordCount = 10;
 
 function getRandomText() {
   const wordList: (string | undefined)[] = [];
@@ -38,6 +38,7 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
   const [mistakes, setMistakes] = useState({});
   const [sessionMistakes, setSessionMistakes] = useState({});
   const [totalSessionMistakes, setTotalSessionMistakes] = useState(0);
+  const [accuracy, setAccuracy] = useState(0);
   const firstName = user.user?.name?.split(' ')[0];
   const email = user.user?.email;
   const inputRef = useRef<HTMLInputElement>(null);
@@ -169,6 +170,8 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
     typingState(false);
     setSessionMistakes({});
     setTotalSessionMistakes(0);
+    setAccuracy(0);
+    setMistakes({});
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -223,17 +226,25 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
 
   useEffect(() => {
     if (isFinished) {
+      console.log('Typing history updated');
+      setDisplayedWPM(wpm);
       updateTypingHistory();
       setHasStartedTyping(false);
-      setDisplayedWPM(wpm);
       setTotalSessionMistakes(
         Object.values<number>(sessionMistakes).reduce<number>(
           (acc: number, curr: number) => acc + curr,
           0
         )
       );
+      const charCount = typingText.reduce(
+        (total, word) => total + (word?.length || 0),
+        0
+      );
+      setAccuracy(
+        Math.floor(((charCount - totalSessionMistakes) / charCount) * 100)
+      );
     }
-  }, [isFinished, mistakes]);
+  }, [isFinished, mistakes, sessionMistakes, wpm, email]);
 
   const updateTypingHistory = async () => {
     if (!isFinished || !wpm || !email || wpm > 250) return;
@@ -250,6 +261,8 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
         body: JSON.stringify({
           wpm,
           mistakes,
+          accuracy,
+          totalSessionMistakes,
         }),
       });
     } catch (error) {
@@ -281,15 +294,7 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
                   </span>
                 </p>
                 <p className="self-center text-4xl font-bold">{`${displayedWPM} WPM`}</p>
-                <p className="self-center">{`Accuracy: ${
-                  (console.log('sessionMistakes', sessionMistakes),
-                  console.log('totalSessionMistakes', totalSessionMistakes),
-                  100 -
-                    (Object.keys(sessionMistakes).length /
-                      (wordIndex + 1) /
-                      (wordCount * 5)) *
-                      100)
-                }%`}</p>
+                <p className="self-center">{`Accuracy: ${accuracy}%`}</p>
               </div>
             )}
           </div>

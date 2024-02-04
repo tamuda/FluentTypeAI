@@ -26,6 +26,8 @@ ChartJS.register(
 interface TypingHistory {
   wpm: number;
   time: string;
+  totalSessionMistakes: number;
+  accuracy: number;
 }
 
 const StatsHistory = ({ user }: { user: any }) => {
@@ -76,6 +78,8 @@ const StatsHistory = ({ user }: { user: any }) => {
                 <tr className="bg-blue-200">
                   <th>Session</th>
                   <th>WPM</th>
+                  <th>Accuracy</th>
+                  <th># of Mistakes</th>
                   <th>Time</th>
                 </tr>
               </thead>
@@ -84,6 +88,10 @@ const StatsHistory = ({ user }: { user: any }) => {
                   <tr key={index} className="border-b">
                     <td className="text-center">{history.length - index}</td>
                     <td className="text-center">{session.wpm}</td>
+                    <td className="text-center">{session.accuracy}%</td>
+                    <td className="text-center">
+                      {session.totalSessionMistakes}
+                    </td>
                     <td className="text-center">
                       {new Date(session.time).toLocaleString()}
                     </td>
@@ -107,23 +115,30 @@ const StatsHistory = ({ user }: { user: any }) => {
                 <tr className="border-b">
                   <td className="text-center">Best Attempt</td>
                   <td className="text-center">
-                    {Math.max(...history.map((session) => session.wpm))} WPM
+                    {history.length > 0
+                      ? Math.max(...history.map((session) => session.wpm)) +
+                        ' WPM'
+                      : 'N/A'}
                   </td>
                 </tr>
                 <tr className="border-b">
                   <td className="text-center">Average</td>
                   <td className="text-center">
-                    {Math.ceil(
-                      history.reduce((acc, curr) => acc + curr.wpm, 0) /
-                        history.length
-                    )}{' '}
-                    WPM
+                    {history.length > 0
+                      ? Math.ceil(
+                          history.reduce((acc, curr) => acc + curr.wpm, 0) /
+                            history.length
+                        ) + ' WPM'
+                      : 'N/A'}
                   </td>
                 </tr>
                 <tr className="border-b">
                   <td className="text-center">Worst Attempt</td>
                   <td className="text-center">
-                    {Math.min(...history.map((session) => session.wpm))} WPM
+                    {history.length > 0
+                      ? Math.min(...history.map((session) => session.wpm)) +
+                        ' WPM'
+                      : 'N/A'}
                   </td>
                 </tr>
               </tbody>
