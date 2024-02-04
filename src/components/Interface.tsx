@@ -209,7 +209,6 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
     index: number,
     mistakes: Record<string, number>
   ) => {
-    console.log('mistakes', mistakes);
     const wordWithOptionalSpace = index === wordCount - 1 ? word : `${word} `;
 
     return wordWithOptionalSpace.split('').map((char, charIndex) => {
