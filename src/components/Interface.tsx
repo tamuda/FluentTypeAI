@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import data from '../../public/text.json';
 
-const wordCount = 10;
+const wordCount = 40;
 
 function getRandomText() {
   const wordList: (string | undefined)[] = [];
@@ -301,29 +301,48 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
               ))}
             </div>
             {isFinished && (
-              <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-row items-center justify-center space-x-4 text-center">
-                <p className="self-center">
-                  {`Mistakes: ${totalSessionMistakes} `}
-                  <span role="img" aria-label="warning">
-                    ⚠️
-                  </span>
-                </p>
-                <p className="self-center text-4xl font-bold">{`${displayedWPM} WPM`}</p>
-                <p className="self-center">{`Accuracy: ${Math.floor(
-                  ((typingText.reduce(
-                    (total, word) => total + (word?.length || 0),
-                    0
-                  ) -
-                    Object.values<number>(sessionMistakes).reduce<number>(
-                      (acc: number, curr: number) => acc + curr,
-                      0
-                    )) /
-                    typingText.reduce(
+              <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center text-center">
+                <div className="flex flex-row items-center justify-center space-x-4">
+                  <p className="self-center">
+                    {`Mistakes: ${totalSessionMistakes} `}
+                    <span role="img" aria-label="warning">
+                      ⚠️
+                    </span>
+                  </p>
+                  <p className="self-center text-4xl font-bold">{`${displayedWPM} WPM`}</p>
+                  <p className="self-center">{`Accuracy: ${Math.floor(
+                    ((typingText.reduce(
                       (total, word) => total + (word?.length || 0),
                       0
-                    )) *
-                    100
-                )}%`}</p>
+                    ) -
+                      Object.values<number>(sessionMistakes).reduce<number>(
+                        (acc: number, curr: number) => acc + curr,
+                        0
+                      )) /
+                      typingText.reduce(
+                        (total, word) => total + (word?.length || 0),
+                        0
+                      )) *
+                      100
+                  )}%`}</p>
+                </div>
+                <div className="flex items-center justify-center">
+                  <div className="flex flex-wrap items-center gap-2">
+                    {Object.entries(sessionMistakes)
+                      .slice(0, 10)
+                      .map(([mistake, count], index) => (
+                        <span
+                          key={mistake}
+                          className="rounded  border-black bg-red-200 px-2.5 py-0.5 text-sm font-medium text-red-800 outline-black dark:bg-red-300 dark:text-red-900"
+                        >
+                          {`${mistake} : ${count}`}
+                          {index === 9 &&
+                            Object.entries(sessionMistakes).length > 10 &&
+                            '...'}
+                        </span>
+                      ))}
+                  </div>
+                </div>
               </div>
             )}
           </div>
