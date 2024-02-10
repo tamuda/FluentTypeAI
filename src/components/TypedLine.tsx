@@ -7,7 +7,7 @@ const TypedLine = () => {
 
   useEffect(() => {
     const options = {
-      stringsElement: '#bios',
+      stringsElement: '#biosa',
       typeSpeed: 26,
       backSpeed: 20,
       loop: false,
@@ -21,19 +21,19 @@ const TypedLine = () => {
 
   return (
     <div className="text-7xl">
-      <ul id="bios" className="">
+      <ul id="biosa" className="">
         <li className="text-7xl">
           Touch Typ
-          <span className="text-7xl bg-gradient-to-r from-red-600 to-teal-400 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-red-600 to-teal-400 bg-clip-text text-7xl text-transparent">
             ieng
           </span>
         </li>
         <li className="text-7xl">
-          <span className="text-7xl bg-gradient-to-r from-red-600 to-teal-400 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-red-600 to-teal-400 bg-clip-text text-7xl text-transparent">
             Toch
           </span>{' '}
           Typing{' '}
-          <span className="text-7xl bg-gradient-to-r from-red-600 to-teal-400 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-red-600 to-teal-400 bg-clip-text text-7xl text-transparent">
             Pred
           </span>
         </li>
