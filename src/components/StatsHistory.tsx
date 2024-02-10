@@ -213,7 +213,7 @@ const StatsHistory = ({ user }: { user: any }) => {
               Object.entries(mistakes).map(([mistake, count]) => (
                 <span
                   key={mistake}
-                  className="rounded border border-black bg-red-200 px-2.5 py-0.5 text-sm font-medium text-red-800 dark:bg-red-300 dark:text-red-900"
+                  className="rounded bg-red-200 px-2.5 py-0.5 text-sm font-medium text-red-800 dark:bg-red-300 dark:text-red-900"
                 >
                   <span key={mistake} className="font-bold">
                     {`${mistake} : ${count}`}
