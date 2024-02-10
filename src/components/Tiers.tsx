@@ -79,7 +79,7 @@ const TiersUpdated = () => {
           your liking.
         </p>
       </div>
-      <div className="mt-6 flex h-96 flex-col overflow-scroll lg:h-screen">
+      <div className="mt-6 flex h-96 flex-col gap-6 overflow-auto md:h-auto md:flex-row md:overflow-hidden">
         {tiers.map((tier, index) => (
           <TierCard key={index} {...tier} />
         ))}

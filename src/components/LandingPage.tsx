@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 
-import TypedLine from './TypedLineTry';
+import TypedLine from './TypedLine';
 
 function LandingPage() {
   return (
