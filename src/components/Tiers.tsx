@@ -70,16 +70,16 @@ const TiersUpdated = () => {
             Ways we offer
           </span>
         </p>
-        <p className="mx-auto mt-4 max-w-4xl text-xl text-gray-500">
+        <p className="mx-5 mt-4 max-w-4xl text-xl text-gray-500">
           Not convinced? Try the free tier and see for yourself. We&apos;re
           confident we can help you improve.
         </p>
-        <p className="mx-auto max-w-4xl text-xl text-gray-500">
+        <p className="mx-5 max-w-4xl text-xl text-gray-500">
           Convinced? We recommend the monthly plan until you&apos;ve improved to
           your liking.
         </p>
       </div>
-      <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-3">
+      <div className="mt-6 flex h-96 flex-col overflow-scroll lg:h-screen">
         {tiers.map((tier, index) => (
           <TierCard key={index} {...tier} />
         ))}

@@ -5,19 +5,19 @@ const Features = () => {
     <div className="flex h-screen flex-col items-center justify-center pb-52">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="pb-8 text-center">
-          <p className="text-4xl font-extrabold text-gray-900 sm:mt-5 sm:text-5xl">
-            <span className=" z-50 bg-gradient-to-r from-blue-500 to-teal-400 bg-clip-text text-6xl text-transparent">
+          <p className="pt-16 text-4xl font-extrabold text-gray-900 sm:mt-5 sm:text-5xl md:pt-1">
+            <span className="z-50 bg-gradient-to-r from-blue-500 to-teal-400 bg-clip-text text-4xl text-transparent md:text-6xl">
               What we offer
             </span>
           </p>
-          <p className="mx-auto max-w-4xl  text-lg text-gray-500">
+          <p className="mx-auto max-w-4xl text-lg text-gray-500">
             We both know the benefits of fast typing. We also both know that
             improving is boring and laborius. But that is because platforms you
             used before don&apos;t actually learn from you so you end up typing
             the same things over and over again. Let&apos;s change that.
           </p>
         </div>
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid h-96 gap-8 overflow-auto lg:h-auto lg:grid-cols-3 lg:overflow-hidden">
           <FeatureCard
             title="AI-Powered Learning"
             description="Our AI learns your typing mistake patterns and tailors your text accordingly, so you type the least for the most improvement."
