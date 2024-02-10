@@ -63,7 +63,7 @@ const TopTypersLeaderboard = () => {
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center pb-40">
-        <div className="blue-500 inline-block size-10 animate-spin rounded-full border-4 border-solid border-current border-r-transparent motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
+        <div className="inline-block size-10 animate-spin rounded-full border-4 border-solid border-current border-r-transparent motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
       </div>
     );
   }
