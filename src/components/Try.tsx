@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 
-import TypedLine from './TypedLineTry';
+import TypedLineTry from './TypedLineTry';
 
 function Try() {
   return (
@@ -9,7 +9,7 @@ function Try() {
       <div className="text-center">
         <h1 className="font-extrabold tracking-tighter" data-aos="zoom-y-out">
           <Link href="/login">
-            <TypedLine />
+            <TypedLineTry />
           </Link>
         </h1>
       </div>

@@ -1,13 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import Typed from 'typed.js';
 
-const TypedLine = () => {
+const TypedLineTry = () => {
   const el = useRef<HTMLElement | null>(null);
   const typed = useRef<Typed | null>(null);
 
   useEffect(() => {
     const options = {
-      stringsElement: '#biosa',
+      stringsElement: '#biosar',
       typeSpeed: 20,
       backSpeed: 10,
       loop: false,
@@ -21,7 +21,7 @@ const TypedLine = () => {
 
   return (
     <div className="text-7xl">
-      <ul id="biosa" className="hidden">
+      <ul id="biosar" className="hidden">
         <li className="text-7xl">FluentTypeAI</li>
         <li className="text-7xl">Click here to get started.</li>
       </ul>
@@ -33,4 +33,4 @@ const TypedLine = () => {
   );
 };
 
-export default TypedLine;
+export default TypedLineTry;
