@@ -24,7 +24,6 @@ function Demo() {
             <Image
               src="/assets/demo.gif"
               alt="Animated GIF showing how the app works"
-              layout="responsive"
               width={500}
               height={200}
             />
