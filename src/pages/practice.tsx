@@ -18,6 +18,7 @@ const Practice = () => {
   const [statsHistoryKey, setStatsHistoryKey] = useState(0);
   const [leaderboardKey, setLeaderboardKey] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
+  const [isFirstTime, setIsFirstTime] = useState(false); // Add isFirstTime state variable
 
   const handleTypingState = (isFinished: boolean) => {
     setIsFinished(isFinished);
@@ -45,6 +46,31 @@ const Practice = () => {
       setCurrentSlide((prev) => (prev > 0 ? prev - 1 : prev));
     }
   };
+
+  const fetchStreak = async () => {
+    try {
+      const response = await fetch(`/api/get_streak`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch history');
+      }
+
+      const data = await response.json();
+
+      if (data.streak === 0) {
+        setIsFirstTime(true);
+      }
+    } catch (error) {
+      console.error('Failed to fetch history:', error);
+    }
+  };
+
+  fetchStreak();
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
@@ -123,7 +149,6 @@ const Practice = () => {
     return (
       <div className="flex h-screen flex-col overflow-hidden">
         <Header user={session} />
-
         <Carousel
           selectedItem={currentSlide}
           onChange={(index) => setCurrentSlide(index)}
@@ -143,8 +168,7 @@ const Practice = () => {
           <Interface user={session} typingState={handleTypingState} />
           <StatsHistory key={statsHistoryKey} user={session} />
         </Carousel>
-
-        <Footer />
+        <Footer isFirstTime={isFirstTime} /> {/* Pass isFirstTime as a prop */}
       </div>
     );
   }
