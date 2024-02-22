@@ -2,40 +2,34 @@ import React from 'react';
 
 const featuresList = [
   'Typing Analysis',
-  'Leaderboard Access',
   'Statistics & Progress',
-  'GPT-2 Text Generation',
-  'GPT-4 Text Generation',
+  'LLM Text Generation',
+  'Custom Prompting',
   'Streak Tracking',
-  'Goal Tracking',
   'Detailed Statistics',
-  'Priority Support',
-  'Developer Contact',
+  'Priority Support & Contact',
 ];
 
 const tiers = [
   {
-    title: 'Free Plan',
+    title: 'Current',
     price: 'Free',
     features: [
       'Typing Analysis',
-      'Leaderboard Access',
       'Statistics & Progress',
-      'GPT-2 Text Generation',
+      'LLM Text Generation',
     ],
     comparisonText: 'Always free',
   },
   {
     title: 'Monthly',
-    price: '$9.99/month',
+    price: '$9.99',
     features: [
       'Typing Analysis',
-      'Leaderboard Access',
       'Statistics & Progress',
-      'GPT-2 Text Generation',
-      'GPT-4 Text Generation',
+      'LLM Text Generation',
+      'Custom Prompting',
       'Streak Tracking',
-      'Goal Tracking',
       'Detailed Statistics',
     ],
     comparisonText: '~2 cups of coffee',
@@ -43,43 +37,35 @@ const tiers = [
   },
   {
     title: 'Annual',
-    price: '$39.99/year',
+    price: '$39.99',
     features: [
       'Typing Analysis',
-      'Leaderboard Access',
       'Statistics & Progress',
-      'GPT-2 Text Generation',
-      'GPT-4 Text Generation',
+      'LLM Text Generation',
+      'Custom Prompting',
       'Streak Tracking',
-      'Goal Tracking',
       'Detailed Statistics',
-      'Priority Support',
-      'Developer Contact',
+      'Priority Support & Contact',
     ],
     comparisonText: '~8 cups of coffee',
-    originalPrice: '$119.88/year',
+    originalPrice: '$119',
   },
 ];
 
 const TiersUpdated = () => {
   return (
-    <div className="flex flex-col items-center justify-center pb-40">
+    <div className="flex flex-col items-center justify-center md:pt-16">
       <div className="text-center">
-        <p className="text-4xl font-extrabold text-gray-900 sm:mt-5 sm:text-5xl">
-          <span className="z-50 bg-gradient-to-r from-blue-500 to-teal-400 bg-clip-text text-6xl text-transparent">
-            Ways we offer
+        <p className="text-2xl font-extrabold text-gray-900 sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
+          <span className="inline-block bg-gradient-to-r from-blue-500 to-teal-400 bg-clip-text text-transparent">
+            What we offer
           </span>
         </p>
-        <p className="mx-5 mt-4 max-w-4xl text-xl text-gray-500">
-          Not convinced? Try the free tier and see for yourself. We&apos;re
-          confident we can help you improve.
-        </p>
-        <p className="mx-5 max-w-4xl text-xl text-gray-500">
-          Convinced? We recommend the monthly plan until you&apos;ve improved to
-          your liking.
+        <p className="mx-auto mt-2 text-sm text-gray-500 sm:text-base md:text-lg lg:max-w-4xl xl:max-w-5xl">
+          We&apos;re confident we can help you improve.
         </p>
       </div>
-      <div className="mt-6 flex h-96 flex-col gap-6 overflow-auto md:h-auto md:flex-row md:overflow-hidden">
+      <div className="mt-6 grid grid-cols-3 gap-5 px-4 text-sm md:mt-10 md:text-lg">
         {tiers.map((tier, index) => (
           <TierCard key={index} {...tier} />
         ))}
@@ -108,8 +94,8 @@ const TierCard = ({
       highlight ? 'bg-gradient-to-r from-blue-100 to-teal-50' : 'bg-white'
     } hover:-translate-y-1 hover:scale-105`}
   >
-    <h3 className="text-xl font-bold text-gray-900">{title}</h3>
-    <div className="mt-2">
+    <h3 className="text-md font-bold text-gray-900 md:text-2xl">{title}</h3>
+    <div className="md:mt-2">
       {originalPrice && (
         <span className="text-lg font-semibold text-red-500 line-through">
           {originalPrice}
@@ -120,7 +106,7 @@ const TierCard = ({
       </span>
     </div>
     <p className="mt-2 text-sm text-gray-600">{comparisonText}</p>
-    <ul className="mt-4 space-y-2">
+    <ul className="ml-2 mt-2 space-y-2 text-xs md:mt-4 md:text-lg">
       {featuresList.map((feature) => (
         <li key={feature} className="flex items-center space-x-2">
           {features.includes(feature) ? (
