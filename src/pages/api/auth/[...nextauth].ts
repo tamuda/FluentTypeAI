@@ -41,6 +41,7 @@ export default NextAuth({
             typingHistory: [],
             username: username,
             mistakes: {},
+            streak: 0,
           });
 
           if (user.email) {

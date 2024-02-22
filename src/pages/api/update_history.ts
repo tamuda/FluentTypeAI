@@ -69,6 +69,22 @@ const updateHistory = async (req: NextApiRequest, res: NextApiResponse) => {
         }
       });
 
+      const typingHistory = userDoc?.typingHistory || [];
+      const lastTypingSession = typingHistory[typingHistory.length - 1];
+      let streak = userDoc?.streak || 0;
+      const lastTypingDate = lastTypingSession
+        ? new Date(lastTypingSession.time)
+        : null;
+      const currentDate = new Date();
+      const dateDifference =
+        currentDate.getDate() - (lastTypingDate ? lastTypingDate.getDate() : 0);
+
+      if (dateDifference === 1) {
+        streak += 1;
+      } else if (dateDifference > 1) {
+        streak = 1;
+      }
+
       const topMistakes: Record<string, number> = Object.entries(mergedMistakes)
         .sort(
           (a: [string, unknown], b: [string, unknown]) =>
@@ -80,7 +96,7 @@ const updateHistory = async (req: NextApiRequest, res: NextApiResponse) => {
       await usersCollection.updateOne(
         { email: userEmail },
         {
-          $set: { mistakes: topMistakes },
+          $set: { mistakes: topMistakes, streak },
           $push: {
             typingHistory: {
               $each: [typingData],
