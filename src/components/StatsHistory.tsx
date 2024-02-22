@@ -9,6 +9,7 @@ import {
   Tooltip,
 } from 'chart.js';
 import chartTrendline from 'chartjs-plugin-trendline';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 
@@ -366,7 +367,7 @@ const TierCard = ({
   <div className="flex-1 flex-col justify-center bg-white bg-gradient-to-r from-teal-50 to-blue-100 p-4 text-center shadow-lg md:max-h-[45vh] md:max-w-[45vw]">
     <h3 className="text-md font-bold text-gray-900 md:text-xl">Current Plan</h3>
     <div className="flex flex-row items-center justify-between px-6">
-      <ul className="ml-2 mt-2 space-y-2 text-xs md:mt-4 md:text-lg">
+      <ul className="ml-2 mt-2 space-y-2 text-xs md:mt-4 md:text-sm">
         {featuresList
           .filter((feature) => features.includes(feature))
           .map((feature) => (
@@ -388,7 +389,7 @@ const TierCard = ({
             </li>
           ))}
       </ul>
-      <ul className="ml-2 mt-2 space-y-2 text-xs md:mt-4 md:text-lg">
+      <ul className="ml-2 mt-2 space-y-2 text-xs md:mt-4 md:text-sm">
         {featuresList
           .filter((feature) => !features.includes(feature))
           .map((feature) => (
@@ -417,9 +418,12 @@ const TierCard = ({
             </li>
           ))}
       </ul>
-      <button className="h-1/2 items-center justify-center rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700">
+      <Link
+        href="/upgrade"
+        className="h-1/2 items-center justify-center rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+      >
         Upgrade
-      </button>
+      </Link>
     </div>
   </div>
 );
