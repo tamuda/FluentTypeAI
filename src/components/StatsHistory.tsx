@@ -155,7 +155,7 @@ const StatsHistory = ({ user }: { user: any }) => {
   }, [user]);
 
   return (
-    <div className="flex h-screen flex-col items-center justify-center p-12 pb-44 md:flex-row overflow-scroll">
+    <div className="flex h-screen flex-col items-center justify-center p-12 pb-44 md:flex-row">
       <div className="flex flex-1 flex-col">
         <div className="mb-4 flex-1 flex-col justify-center bg-white bg-gradient-to-r from-teal-50 to-blue-100 p-4 text-center shadow-xl md:max-h-[35vh] md:max-w-full">
           <h1 className="mb-4 text-xl font-bold">History</h1>

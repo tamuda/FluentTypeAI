@@ -4,8 +4,8 @@ const featuresList = [
   'Typing Analysis',
   'Statistics & Progress',
   'LLM Text Generation',
-  'Custom Prompting',
   'Streak Tracking',
+  'Custom Prompting',
   'Detailed Statistics',
   'Priority Support & Contact',
 ];
@@ -18,6 +18,7 @@ const tiers = [
       'Typing Analysis',
       'Statistics & Progress',
       'LLM Text Generation',
+      'Streak Tracking',
     ],
     comparisonText: 'Always free',
   },
