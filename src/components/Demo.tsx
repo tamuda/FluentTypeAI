@@ -3,27 +3,31 @@ import React from 'react';
 
 function Demo() {
   return (
-    <div className="flex h-screen flex-col items-center justify-center overflow-hidden pb-44">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <div className="flex min-h-screen w-full flex-col items-center justify-center overflow-hidden pb-40">
+      <div className="w-full max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <p className="mt-1 text-4xl font-extrabold text-gray-900 sm:mt-5 sm:text-5xl">
-            <span className="bg-gradient-to-r from-blue-500 to-teal-400 bg-clip-text text-6xl text-transparent">
-              How we offer it
+          <p className="text-2xl font-extrabold text-gray-900 sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
+            <span className="inline-block bg-gradient-to-r from-blue-500 to-teal-400 bg-clip-text text-transparent">
+              Quick demo
             </span>
           </p>
-          <p className="mx-auto max-w-3xl pt-3 text-xl text-gray-500">
-            Still not convinced? Here&apos;s a quick demo that highlights the
-            main features.
+          <p className="mx-auto mt-4 max-w-xl text-base text-gray-500 sm:text-lg md:max-w-2xl md:text-xl">
+            Here&apos;s a quick demo that highlights the main features.
           </p>
         </div>
 
-        <div className="mt-10 flex justify-center">
-          <Image
-            src="/assets/demo.gif"
-            alt="Animated GIF showing how the app works"
-            width={500}
-            height={200}
-          />
+        <div className="mt-8 flex justify-center">
+          <div
+            className="relative"
+            style={{ width: '100%', maxWidth: '500px', height: 'auto' }}
+          >
+            <Image
+              src="/assets/demo.gif"
+              alt="Animated GIF showing how the app works"
+              width={500}
+              height={200}
+            />
+          </div>
         </div>
       </div>
     </div>

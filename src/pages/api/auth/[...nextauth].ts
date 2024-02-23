@@ -2,6 +2,7 @@ import GoogleProvider from 'next-auth/providers/google';
 import NextAuth from 'node_modules/next-auth';
 import { generateUsername } from 'unique-username-generator';
 
+import { sendWelcomeEmail } from '../../../../lib/email';
 import clientPromise from '../../../../lib/mongodb';
 
 async function connectToDatabase() {
@@ -40,7 +41,12 @@ export default NextAuth({
             typingHistory: [],
             username: username,
             mistakes: {},
+            streak: 0,
           });
+
+          if (user.email) {
+            await sendWelcomeEmail(user.email);
+          }
         }
 
         return true;

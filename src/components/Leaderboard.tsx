@@ -10,6 +10,7 @@ const TopTypersLeaderboard = () => {
   const [topTypers, setTopTypers] = useState<TopTyper[] | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(true);
   const [username, setUsername] = useState('');
+  const [userStreakNumber, setUserStreakNumber] = useState(0);
 
   const fetchUsername = async () => {
     try {
@@ -31,7 +32,25 @@ const TopTypersLeaderboard = () => {
     }
   };
 
-  fetchUsername();
+  const fetchStreak = async () => {
+    try {
+      const response = await fetch(`/api/get_streak`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch history');
+      }
+
+      const data = await response.json();
+      setUserStreakNumber(data.streak);
+    } catch (error) {
+      console.error('Failed to fetch history:', error);
+    }
+  };
 
   useEffect(() => {
     const fetchTopTypers = async () => {
@@ -57,6 +76,9 @@ const TopTypersLeaderboard = () => {
       }
     };
 
+    fetchUsername();
+    fetchStreak();
+
     fetchTopTypers();
   }, []);
 
@@ -69,7 +91,7 @@ const TopTypersLeaderboard = () => {
   }
 
   return (
-    <div className="flex h-screen flex-col items-center justify-center p-6 pb-40 md:flex-row">
+    <div className="flex h-screen flex-col items-center justify-center p-6 pb-40">
       <div className="m-4 flex min-h-[33vh] min-w-[66vw] flex-col justify-center bg-white bg-gradient-to-r from-blue-100 to-teal-50 p-4 text-center shadow-xl">
         <h1 className="mb-4 text-2xl font-bold">
           Highest Average WPM Leaderboard
@@ -108,6 +130,24 @@ const TopTypersLeaderboard = () => {
               ))}
             </tbody>
           </table>
+        </div>
+      </div>
+      <div className="m-4 flex flex-col justify-center bg-white bg-gradient-to-r from-blue-100 to-teal-100 p-4 text-center shadow-xl">
+        <h1 className="mb-4 text-2xl font-bold">14-day Streak Goal</h1>
+        <div className="justify-center">
+          <div className="flex max-w-sm justify-center gap-1">
+            {Array.from({ length: 14 }, (_, i) => (
+              <div
+                key={i}
+                className={`size-4 ${
+                  i < userStreakNumber ? 'bg-green-500' : 'bg-gray-300'
+                }`}
+                title={`Day ${i + 1}: ${
+                  i < userStreakNumber ? 'Active' : 'Inactive'
+                }`}
+              ></div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

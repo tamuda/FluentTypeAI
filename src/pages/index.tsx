@@ -7,6 +7,7 @@ import { Carousel } from 'react-responsive-carousel';
 
 import Demo from '@/components/Demo';
 import Features from '@/components/Features';
+import FlyingText from '@/components/FlyingText';
 import LandingPage from '@/components/LandingPage';
 import Tiers from '@/components/Tiers';
 import Try from '@/components/Try';
@@ -124,6 +125,9 @@ const Index = () => {
         </Carousel>
       </div>
       <Footer />
+      <div className="circles" style={{ zIndex: -1 }}>
+        <FlyingText />
+      </div>
     </div>
   );
 };

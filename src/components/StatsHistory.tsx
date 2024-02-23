@@ -9,6 +9,7 @@ import {
   Tooltip,
 } from 'chart.js';
 import chartTrendline from 'chartjs-plugin-trendline';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 
@@ -23,6 +24,61 @@ ChartJS.register(
   chartTrendline
 );
 
+const featuresList = [
+  'Typing Analysis',
+  'Statistics & Progress',
+  'Leaderboard',
+  'Bayesian Text Generation',
+  'LLM Text Generation',
+  'Custom Prompting',
+  'Streak Tracking',
+  'Detailed Statistics',
+  'Priority Support & Contact',
+];
+
+const tiers = [
+  {
+    title: 'Current',
+    price: 'Free',
+    features: [
+      'Typing Analysis',
+      'Statistics & Progress',
+      'Leaderboard',
+      'Bayesian Text Generation',
+    ],
+    comparisonText: 'Always free',
+  },
+  {
+    title: 'Monthly',
+    price: '$9.99',
+    features: [
+      'Typing Analysis',
+      'Statistics & Progress',
+      'LLM Text Generation',
+      'Custom Prompting',
+      'Streak Tracking',
+      'Detailed Statistics',
+    ],
+    comparisonText: '~2 cups of coffee',
+    highlight: true,
+  },
+  {
+    title: 'Annual',
+    price: '$39.99',
+    features: [
+      'Typing Analysis',
+      'Statistics & Progress',
+      'LLM Text Generation',
+      'Custom Prompting',
+      'Streak Tracking',
+      'Detailed Statistics',
+      'Priority Support & Contact',
+    ],
+    comparisonText: '~8 cups of coffee',
+    originalPrice: '$119',
+  },
+];
+
 interface TypingHistory {
   wpm: number;
   time: string;
@@ -33,6 +89,7 @@ interface TypingHistory {
 const StatsHistory = ({ user }: { user: any }) => {
   const [history, setHistory] = useState<TypingHistory[]>([]);
   const [mistakes, setMistakes] = useState<number>(0);
+  const selectedTier = tiers[0];
 
   useEffect(() => {
     const fetchHistory = async () => {
@@ -99,7 +156,7 @@ const StatsHistory = ({ user }: { user: any }) => {
   }, [user]);
 
   return (
-    <div className="flex h-screen flex-col items-center justify-center overflow-scroll p-12 pb-44 md:flex-row">
+    <div className="flex h-screen flex-col items-center justify-center p-12 pb-44 md:flex-row">
       <div className="flex flex-1 flex-col">
         <div className="mb-4 flex-1 flex-col justify-center bg-white bg-gradient-to-r from-teal-50 to-blue-100 p-4 text-center shadow-xl md:max-h-[35vh] md:max-w-full">
           <h1 className="mb-4 text-xl font-bold">History</h1>
@@ -226,67 +283,149 @@ const StatsHistory = ({ user }: { user: any }) => {
           </div>
         </div>
       </div>
-      <div className="m-4 flex flex-1 flex-col justify-center bg-white bg-gradient-to-r from-teal-50 to-blue-100 p-4 text-center shadow-lg md:max-h-[50vh] md:max-w-[45vw]">
-        <h2 className="mb-4 text-xl font-bold">Progression</h2>
-        {history ? (
-          <Line
-            data={{
-              labels: history.map((_, index) => `${index + 1}`),
-              datasets: [
-                {
-                  label: 'WPM',
-                  data: [...history.map((item) => item.wpm)].reverse(),
-                  borderColor: 'rgb(75, 192, 192)',
-                  tension: 0.1,
-                  trendlineLinear: {
+      <div className="ml-4 flex w-1/2 flex-col gap-2">
+        <div className="flex-1 flex-col justify-center bg-white bg-gradient-to-r from-teal-50 to-blue-100 p-4 text-center shadow-lg md:max-h-[50vh] md:max-w-[45vw]">
+          <h2 className="mb-4 text-xl font-bold">Progression</h2>
+          {history ? (
+            <Line
+              data={{
+                labels: history.map((_, index) => `${index + 1}`),
+                datasets: [
+                  {
+                    label: 'WPM',
+                    data: [...history.map((item) => item.wpm)].reverse(),
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1,
+                    trendlineLinear: {
+                      borderColor: 'red',
+                      colorMin: 'red',
+                      colorMax: 'red',
+                      lineStyle: 'dotted',
+                      width: 2,
+                    },
+                    borderWidth: 4,
+                  } as any,
+                  {
+                    label: 'WPM Trendline',
+                    data: [],
                     borderColor: 'red',
-                    colorMin: 'red',
-                    colorMax: 'red',
-                    lineStyle: 'dotted',
-                    width: 2,
+                    borderWidth: 2,
+                    lineStyle: 'dashed',
+                    borderDash: [5, 5],
+                    pointRadius: 0,
+                    pointHitRadius: 0,
+                    pointHoverRadius: 0,
+                    pointHoverBorderWidth: 0,
                   },
-                  borderWidth: 4,
-                } as any,
-                {
-                  label: 'WPM Trendline',
-                  data: [],
-                  borderColor: 'red',
-                  borderWidth: 2,
-                  lineStyle: 'dashed',
-                  borderDash: [5, 5],
-                  pointRadius: 0,
-                  pointHitRadius: 0,
-                  pointHoverRadius: 0,
-                  pointHoverBorderWidth: 0,
+                  {
+                    label: 'Accuracy',
+                    data: [...history.map((item) => item.accuracy)].reverse(),
+                    borderColor: 'rgb(54, 162, 235)',
+                    tension: 0.1,
+                  },
+                ],
+              }}
+              options={{
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                  },
                 },
-                {
-                  label: 'Accuracy',
-                  data: [...history.map((item) => item.accuracy)].reverse(),
-                  borderColor: 'rgb(54, 162, 235)',
-                  tension: 0.1,
+                plugins: {
+                  legend: {
+                    display: true,
+                    onClick: () => {},
+                  },
                 },
-              ],
-            }}
-            options={{
-              scales: {
-                y: {
-                  beginAtZero: true,
-                },
-              },
-              plugins: {
-                legend: {
-                  display: true,
-                  onClick: () => {},
-                },
-              },
-            }}
-          />
-        ) : (
-          <p>No data to display</p>
-        )}
+              }}
+            />
+          ) : (
+            <p>No data to display</p>
+          )}
+        </div>
+        {tiers.map((tier, index) => {
+          if (tier === selectedTier) {
+            return <TierCard key={index} {...tier} />;
+          }
+          return null;
+        })}
       </div>
     </div>
   );
 };
+
+const TierCard = ({
+  features,
+}: {
+  title: string;
+  price: string;
+  features: string[];
+  comparisonText: string;
+  highlight?: boolean;
+  originalPrice?: string;
+}) => (
+  <div className="flex-1 flex-col justify-center bg-white bg-gradient-to-r from-teal-50 to-blue-100 p-4 text-center shadow-lg md:max-h-[45vh] md:max-w-[45vw]">
+    <h3 className="text-md font-bold text-gray-900 md:text-xl">Current Plan</h3>
+    <div className="flex flex-row items-center justify-between px-6">
+      <ul className="ml-2 mt-2 space-y-2 text-xs md:mt-4 md:text-sm">
+        {featuresList
+          .filter((feature) => features.includes(feature))
+          .map((feature) => (
+            <li key={feature} className="flex items-center space-x-2">
+              <svg
+                className="size-4 text-green-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+              <span className="text-sm text-gray-700">{feature}</span>
+            </li>
+          ))}
+      </ul>
+      <ul className="ml-2 mt-2 space-y-2 text-xs md:mt-4 md:text-sm">
+        {featuresList
+          .filter((feature) => !features.includes(feature))
+          .map((feature) => (
+            <li key={feature} className="flex items-center space-x-2">
+              <svg
+                className="size-4 text-red-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+
+              <span
+                className={`text-sm text-gray-700 ${
+                  features.includes(feature) ? 'text-opacity-50' : ''
+                }`}
+              >
+                {feature}
+              </span>
+            </li>
+          ))}
+      </ul>
+      <Link
+        href="/upgrade"
+        className="h-1/2 items-center justify-center rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+      >
+        Upgrade
+      </Link>
+    </div>
+  </div>
+);
 
 export default StatsHistory;

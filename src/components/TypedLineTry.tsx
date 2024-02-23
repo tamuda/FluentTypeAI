@@ -22,7 +22,7 @@ const TypedLineTry = () => {
   return (
     <div className="text-7xl">
       <ul id="biosar" className="hidden">
-        <li className="text-7xl">FluentTypeAI</li>
+        <li className="text-7xl">Enough talking, let&apos;s get typing</li>
         <li className="text-7xl">Click here to get started.</li>
       </ul>
       <span

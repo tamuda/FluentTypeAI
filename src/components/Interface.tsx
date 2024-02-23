@@ -78,7 +78,7 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
 
   function getPlaceholderMessage(wpm: number) {
     if (wpm === 0) {
-      return `Welcome to the practice grounds, ${firstName}!`;
+      return `You can start typing here, ${firstName}!`;
     } else if (wpm < 30) {
       return `That's a good start ${firstName}, try to pick up the pace!`;
     } else if (wpm < 50) {
