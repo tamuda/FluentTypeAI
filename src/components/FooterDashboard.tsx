@@ -16,7 +16,7 @@ function Footer({ isFirstTime }: FooterProps) {
             <div className="text-center">
               <div className="pt-10 text-7xl leading-5 text-blue-300">”</div>
               <div className="max-w-xl pb-4 text-xl font-medium">
-                Welcome to FluentTypeAI! Here&apos;s a quick tutorial:
+                <b>Welcome to FluentTypeAI! Here&apos;s a quick tutorial:</b>
                 <ul className="mx-6 mt-6 list-inside list-disc text-left text-base">
                   <li className="mb-2">
                     Type each word correctly to progress, one word at a time
@@ -47,6 +47,26 @@ function Footer({ isFirstTime }: FooterProps) {
                     keyboard to navigate to leaderboard and stats screens once
                     you&quot;ve completed typing (or click on the arrows on the
                     screen).
+                  </li>
+                  <li className="mb-2">
+                    You can always access this tutorial by clicking the{' '}
+                    <span className="inline-flex items-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.7"
+                        stroke="currentColor"
+                        className="size-3"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"
+                        />
+                      </svg>
+                    </span>{' '}
+                    button in the footer. <b>Good luck!</b>
                   </li>
                 </ul>
               </div>
