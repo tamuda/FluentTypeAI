@@ -126,7 +126,10 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
       const lastChar = currentInput.slice(-1);
       const expectedChar = typingText[wordIndex]?.[currentInput.length - 1];
 
-      if (lastChar !== expectedChar && currentInput.length <= (typingText[wordIndex]?.length ?? 0)) {
+      if (
+        lastChar !== expectedChar &&
+        currentInput.length <= (typingText[wordIndex]?.length ?? 0)
+      ) {
         const prevChar = currentInput.slice(-2, -1);
         const correctSequence = prevChar + (expectedChar ?? '');
 
@@ -138,7 +141,10 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
     }
 
     // Check if the typing test is finished
-    if (currentInput.trim() === typingText[wordIndex] && wordIndex === typingText.length - 1) {
+    if (
+      currentInput.trim() === typingText[wordIndex] &&
+      wordIndex === typingText.length - 1
+    ) {
       finishTypingTest();
     }
   };
@@ -278,16 +284,11 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
   };
 
   const calculateCharCount = (text: string[]) => {
-    return text.reduce(
-      (total, word) => total + (word?.length || 0),
-      0
-    );
+    return text.reduce((total, word) => total + (word?.length || 0), 0);
   };
 
   const calculateAccuracy = (charCount: number, totalMistakes: number) => {
-    return Math.floor(
-      ((charCount - totalMistakes) / charCount) * 100
-    );
+    return Math.floor(((charCount - totalMistakes) / charCount) * 100);
   };
 
   const updateTypingHistory = async (
