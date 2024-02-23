@@ -18,7 +18,7 @@ const Practice = () => {
   const [statsHistoryKey, setStatsHistoryKey] = useState(0);
   const [leaderboardKey, setLeaderboardKey] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
-  const [isFirstTime, setIsFirstTime] = useState(false); // Add isFirstTime state variable
+  const [isFirstTime, setIsFirstTime] = useState(false);
 
   const handleTypingState = (isFinished: boolean) => {
     setIsFinished(isFinished);
@@ -69,8 +69,6 @@ const Practice = () => {
       console.error('Failed to fetch history:', error);
     }
   };
-
-  fetchStreak();
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
@@ -146,6 +144,8 @@ const Practice = () => {
     );
 
   if (session && session.user) {
+    fetchStreak();
+
     return (
       <div className="flex h-screen flex-col overflow-hidden">
         <Header user={session} />
@@ -168,7 +168,7 @@ const Practice = () => {
           <Interface user={session} typingState={handleTypingState} />
           <StatsHistory key={statsHistoryKey} user={session} />
         </Carousel>
-        <Footer isFirstTime={isFirstTime} /> {/* Pass isFirstTime as a prop */}
+        <Footer isFirstTime={isFirstTime} />
       </div>
     );
   }
