@@ -24,7 +24,7 @@ const getUsername = async (req: NextApiRequest, res: NextApiResponse) => {
     const usersCollection = db.collection('users');
     const user = await usersCollection.findOne(
       { email: userEmail },
-      { projection: { streak: 1, _id: 0, } }
+      { projection: { streak: 1, _id: 0 } }
     );
 
     if (!user) {
