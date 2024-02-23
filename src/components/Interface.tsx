@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import data from '../../public/text.json';
 
-const wordCount = 40;
+const wordCount = 30;
 
 function getRandomText() {
   const wordList: (string | undefined)[] = [];
@@ -104,6 +104,7 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
     const currentInput = e.target.value;
     setInputValue(currentInput);
 
+    // Start the timer when the user starts typing
     if (!hasStartedTyping && currentInput.length > 0) {
       setHasStartedTyping(true);
       if (!startTime) {
@@ -114,12 +115,13 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
     const currentWordWithSpace = typingText[wordIndex] + ' ';
     const isCorrectUpToSpace = currentInput === currentWordWithSpace;
 
+    // If the current word is correct, move to the next word
     if (isCorrectUpToSpace) {
       setWordIndex((prevIndex) => prevIndex + 1);
       setInputValue('');
-    } else if (currentInput.endsWith(' ') && !isCorrectUpToSpace) {
     }
 
+    // Check for mistakes
     if (currentInput.length > 1) {
       const lastChar = currentInput.slice(-1);
       const expectedChar = typingText[wordIndex]?.[currentInput.length - 1];
@@ -133,31 +135,41 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
 
         if (expectedChar && correctSequence.length === 2) {
           const mistakeKey = `${correctSequence}`;
-          setMistakes((prevMistakes: Record<string, number>) => ({
-            ...prevMistakes,
-            [mistakeKey]: (prevMistakes[mistakeKey] || 0) + 1,
-          }));
-          setSessionMistakes((prevMistakes: Record<string, number>) => ({
-            ...prevMistakes,
-            [mistakeKey]: (prevMistakes[mistakeKey] || 0) + 1,
-          }));
+          updateMistakes(mistakeKey);
         }
       }
     }
 
-    const trimmedInput = currentInput.trim();
+    // Check if the typing test is finished
     if (
-      trimmedInput === typingText[wordIndex] &&
+      currentInput.trim() === typingText[wordIndex] &&
       wordIndex === typingText.length - 1
     ) {
-      if (startTime) {
-        const durationInMinutes = (Date.now() - startTime) / 60000;
-        const calculatedWPM = Math.floor((wordIndex + 1) / durationInMinutes);
-        setWpm(calculatedWPM);
-      }
-      setIsFinished(true);
-      setInputValue('');
+      finishTypingTest();
     }
+  };
+
+  // Function to update mistakes
+  const updateMistakes = (mistakeKey: string) => {
+    setMistakes((prevMistakes: Record<string, number>) => ({
+      ...prevMistakes,
+      [mistakeKey]: (prevMistakes[mistakeKey] || 0) + 1,
+    }));
+    setSessionMistakes((prevMistakes: Record<string, number>) => ({
+      ...prevMistakes,
+      [mistakeKey]: (prevMistakes[mistakeKey] || 0) + 1,
+    }));
+  };
+
+  // Function to finish the typing test
+  const finishTypingTest = () => {
+    if (startTime) {
+      const durationInMinutes = (Date.now() - startTime) / 60000;
+      const calculatedWPM = Math.floor((wordIndex + 1) / durationInMinutes);
+      setWpm(calculatedWPM);
+    }
+    setIsFinished(true);
+    setInputValue('');
   };
 
   const handleTryAgain = () => {
@@ -251,37 +263,33 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
 
   useEffect(() => {
     if (isFinished && !hasUpdatedRef.current) {
+      const totalMistakes = calculateTotalMistakes(sessionMistakes);
+      const charCount = calculateCharCount(typingText as string[]);
+      const accuracy = calculateAccuracy(charCount, totalMistakes);
+
       setDisplayedWPM(wpm);
-      setTotalSessionMistakes(
-        Object.values<number>(sessionMistakes).reduce<number>(
-          (acc: number, curr: number) => acc + curr,
-          0
-        )
-      );
-      const charCount = typingText.reduce(
-        (total, word) => total + (word?.length || 0),
-        0
-      );
-      updateTypingHistory(
-        Math.floor(
-          ((charCount -
-            Object.values<number>(sessionMistakes).reduce<number>(
-              (acc: number, curr: number) => acc + curr,
-              0
-            )) /
-            charCount) *
-            100
-        ),
-        Object.values<number>(sessionMistakes).reduce<number>(
-          (acc: number, curr: number) => acc + curr,
-          0
-        )
-      );
+      setTotalSessionMistakes(totalMistakes);
+      updateTypingHistory(accuracy, totalMistakes);
       setHasStartedTyping(false);
 
       hasUpdatedRef.current = true;
     }
   }, [isFinished, mistakes, sessionMistakes, wpm, email]);
+
+  const calculateTotalMistakes = (mistakes: Record<string, number>) => {
+    return Object.values<number>(mistakes).reduce<number>(
+      (acc: number, curr: number) => acc + curr,
+      0
+    );
+  };
+
+  const calculateCharCount = (text: string[]) => {
+    return text.reduce((total, word) => total + (word?.length || 0), 0);
+  };
+
+  const calculateAccuracy = (charCount: number, totalMistakes: number) => {
+    return Math.floor(((charCount - totalMistakes) / charCount) * 100);
+  };
 
   const updateTypingHistory = async (
     accuracy: number,

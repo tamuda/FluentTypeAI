@@ -29,9 +29,9 @@ const featuresList = [
   'Statistics & Progress',
   'Leaderboard',
   'Bayesian Text Generation',
+  'Streak Tracking',
   'LLM Text Generation',
   'Custom Prompting',
-  'Streak Tracking',
   'Detailed Statistics',
   'Priority Support & Contact',
 ];
@@ -45,6 +45,7 @@ const tiers = [
       'Statistics & Progress',
       'Leaderboard',
       'Bayesian Text Generation',
+      'Streak Tracking',
     ],
     comparisonText: 'Always free',
   },
@@ -56,7 +57,6 @@ const tiers = [
       'Statistics & Progress',
       'LLM Text Generation',
       'Custom Prompting',
-      'Streak Tracking',
       'Detailed Statistics',
     ],
     comparisonText: '~2 cups of coffee',
@@ -70,7 +70,6 @@ const tiers = [
       'Statistics & Progress',
       'LLM Text Generation',
       'Custom Prompting',
-      'Streak Tracking',
       'Detailed Statistics',
       'Priority Support & Contact',
     ],
@@ -365,7 +364,9 @@ const TierCard = ({
   originalPrice?: string;
 }) => (
   <div className="flex-1 flex-col justify-center bg-white bg-gradient-to-r from-teal-50 to-blue-100 p-4 text-center shadow-lg md:max-h-[45vh] md:max-w-[45vw]">
-    <h3 className="text-md font-bold text-gray-900 md:text-xl">Current Plan</h3>
+    <h3 className="text-base font-bold text-gray-900 md:text-xl">
+      Current Plan
+    </h3>
     <div className="flex flex-row items-center justify-between px-6">
       <ul className="ml-2 mt-2 space-y-2 text-xs md:mt-4 md:text-sm">
         {featuresList
