@@ -7,6 +7,7 @@ interface FooterProps {
 
 function Footer({ isFirstTime }: FooterProps) {
   const [isInfoVisible, setInfoVisible] = useState(isFirstTime);
+  console.log(isInfoVisible);
 
   return (
     <>
