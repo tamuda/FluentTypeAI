@@ -258,7 +258,7 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
   useEffect(() => {
     if (isFinished && !hasUpdatedRef.current) {
       const totalMistakes = calculateTotalMistakes(sessionMistakes);
-      const charCount = calculateCharCount(typingText);
+      const charCount = calculateCharCount(typingText as string[]);
       const accuracy = calculateAccuracy(charCount, totalMistakes);
 
       setDisplayedWPM(wpm);
