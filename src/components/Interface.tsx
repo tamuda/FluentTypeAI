@@ -257,37 +257,38 @@ const Interface: React.FC<InterfaceProps> = ({ user, typingState }) => {
 
   useEffect(() => {
     if (isFinished && !hasUpdatedRef.current) {
+      const totalMistakes = calculateTotalMistakes(sessionMistakes);
+      const charCount = calculateCharCount(typingText);
+      const accuracy = calculateAccuracy(charCount, totalMistakes);
+
       setDisplayedWPM(wpm);
-      setTotalSessionMistakes(
-        Object.values<number>(sessionMistakes).reduce<number>(
-          (acc: number, curr: number) => acc + curr,
-          0
-        )
-      );
-      const charCount = typingText.reduce(
-        (total, word) => total + (word?.length || 0),
-        0
-      );
-      updateTypingHistory(
-        Math.floor(
-          ((charCount -
-            Object.values<number>(sessionMistakes).reduce<number>(
-              (acc: number, curr: number) => acc + curr,
-              0
-            )) /
-            charCount) *
-            100
-        ),
-        Object.values<number>(sessionMistakes).reduce<number>(
-          (acc: number, curr: number) => acc + curr,
-          0
-        )
-      );
+      setTotalSessionMistakes(totalMistakes);
+      updateTypingHistory(accuracy, totalMistakes);
       setHasStartedTyping(false);
 
       hasUpdatedRef.current = true;
     }
   }, [isFinished, mistakes, sessionMistakes, wpm, email]);
+
+  const calculateTotalMistakes = (mistakes: Record<string, number>) => {
+    return Object.values<number>(mistakes).reduce<number>(
+      (acc: number, curr: number) => acc + curr,
+      0
+    );
+  };
+
+  const calculateCharCount = (text: string[]) => {
+    return text.reduce(
+      (total, word) => total + (word?.length || 0),
+      0
+    );
+  };
+
+  const calculateAccuracy = (charCount: number, totalMistakes: number) => {
+    return Math.floor(
+      ((charCount - totalMistakes) / charCount) * 100
+    );
+  };
 
   const updateTypingHistory = async (
     accuracy: number,
