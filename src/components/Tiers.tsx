@@ -94,7 +94,7 @@ const TierCard = ({
       highlight ? 'bg-gradient-to-r from-blue-100 to-teal-50' : 'bg-white'
     } hover:-translate-y-1 hover:scale-105`}
   >
-    <h3 className="text-md font-bold text-gray-900 md:text-2xl">{title}</h3>
+    <h3 className="text-base font-bold text-gray-900 md:text-2xl">{title}</h3>
     <div className="md:mt-2">
       {originalPrice && (
         <span className="text-lg font-semibold text-red-500 line-through">
